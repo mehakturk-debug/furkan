@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dayak Arsızı Furkan - EFSANE MOD</title>
+    <title>Furkan Tokatla - LEGENDARY MOD</title>
     <style>
-        /* --- ANİMASYONLAR VE EFEKTLER --- */
+        /* --- ANİMASYONLAR --- */
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             20% { transform: translate(-3px, 0px) rotate(1deg); }
@@ -18,6 +18,10 @@
             0% { background-color: #ff0000; }
             50% { background-color: #00ff00; }
             100% { background-color: #0000ff; }
+        }
+        @keyframes crack-fade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.5); }
         }
         .shake-active { animation: shake 0.2s infinite; }
         .combo-active { animation: combo-bg 0.1s infinite !important; }
@@ -32,31 +36,29 @@
             align-items: center;
             padding: 20px;
             margin: 0;
-            transition: background-color 0.1s, filter 0.1s;
+            overflow-x: hidden;
+            transition: background 0.5s;
         }
 
-        button { touch-action: manipulation; } /* Mobil hızlandırma */
-
-        /* ÜST PANEL */
-        .instructions {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px dashed #ff4757;
-            padding: 15px;
+        /* CAN BARI */
+        .health-container {
+            width: 350px;
+            height: 25px;
+            background: #444;
+            border: 3px solid #fff;
             border-radius: 15px;
-            margin-bottom: 20px;
-            max-width: 600px;
-            font-size: 0.85rem;
-            text-align: center;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        #health-bar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff4757, #ff6b81);
+            transition: width 0.2s;
         }
 
-        .counter-box {
-            font-size: 2.5rem;
-            color: #ffcc00;
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
-        }
-
-        #unvan { font-size: 1.2rem; color: #00ffcc; margin-bottom: 15px; }
+        .counter-box { font-size: 2.5rem; color: #ffcc00; margin: 5px 0; }
+        #unvan { font-size: 1.1rem; color: #00ffcc; margin-bottom: 10px; }
 
         .stage-container {
             display: flex;
@@ -68,120 +70,75 @@
         }
 
         .side-text {
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: #ff4757;
-            writing-mode: vertical-rl;
-            text-transform: uppercase;
-            text-shadow: 3px 3px 0px #fff;
-            user-select: none;
+            font-size: 3.5rem; color: #ff4757; writing-mode: vertical-rl;
+            text-transform: uppercase; text-shadow: 3px 3px 0px #fff;
         }
 
         .main-display {
             position: relative;
-            width: 350px;
-            height: 350px;
-            background: #000;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 8px solid #ff4757;
+            width: 350px; height: 350px;
+            background: #000; border-radius: 20px;
+            overflow: hidden; border: 8px solid #ff4757;
         }
 
         #furkan-img, #main-video { width: 100%; height: 100%; object-fit: cover; position: absolute; }
         #main-video { display: none; z-index: 2; }
 
-        /* Konuşma Balonu */
+        /* EKRAN ÇATLAĞI EFEKTİ */
+        #crack-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://i.imgur.com/7S8T6Vp.png'); /* Örnek çatlak görseli */
+            background-size: cover; z-index: 999; display: none; pointer-events: none;
+        }
+
         .balon {
-            position: absolute;
-            background: white;
-            color: black;
-            padding: 10px;
-            border-radius: 15px;
-            font-weight: bold;
-            z-index: 100;
-            box-shadow: 5px 5px 0px #ff4757;
+            position: absolute; background: white; color: black; padding: 10px;
+            border-radius: 15px; font-weight: bold; z-index: 100;
         }
 
-        /* Sorgu Paneli */
+        /* PANEL VE BUTONLAR */
         #suspect-panel {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 300;
-        }
-
-        .suspect-btn {
-            background: #ff4757;
-            color: white;
-            border: 2px solid #fff;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); display: none;
+            flex-direction: column; justify-content: center; align-items: center; z-index: 300;
         }
 
         .tokat-btn {
-            padding: 20px 60px;
-            font-size: 2rem;
-            background: #ff4757;
-            color: white;
-            border: 4px solid white;
-            border-radius: 100px;
-            cursor: pointer;
-            margin-bottom: 15px;
+            padding: 20px 60px; font-size: 2.5rem; background: #ff4757;
+            color: white; border: 4px solid white; border-radius: 100px;
+            cursor: pointer; font-weight: 900; transition: 0.1s;
         }
+        .gold-tokat { background: #ffd700 !important; color: #000 !important; border-color: #000 !important; box-shadow: 0 0 30px #ffd700 !important; }
 
-        .share-btn {
-            background: #25d366; /* WhatsApp Yeşili */
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-bottom: 30px;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 8px;
-            margin-bottom: 50px;
-        }
-
+        .grid-container { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; margin-top: 30px; }
         .num-btn { width: 50px; height: 50px; border: none; border-radius: 8px; color: white; cursor: pointer; }
 
-        @media (max-width: 800px) {
-            .side-text { font-size: 1.5rem; }
-            .main-display { width: 280px; height: 280px; }
-            .grid-container { grid-template-columns: repeat(5, 1fr); }
+        #achievement-box {
+            position: fixed; bottom: 20px; right: 20px; background: #ffcc00;
+            color: #000; padding: 15px; border-radius: 10px; display: none;
+            font-weight: bold; box-shadow: 0 0 15px rgba(0,0,0,0.5); z-index: 1000;
         }
     </style>
 </head>
 <body id="body-main">
 
-    <div class="instructions">
-        <b>BİLGİ:</b> Furkan'ı tokatla, unvan kazan! <br>
-        Furkan suçlu tahmini yapınca doğru ismi seçmezsen seni hain ilan eder. <br>
-        Hızlı basarsan <b>KOMBO</b> açılır!
-    </div>
+    <div id="crack-screen"></div>
+    <div id="achievement-box">🏆 BAŞARIM AÇILDI!</div>
 
     <div class="counter-box">TOKAT: <span id="counter">0</span></div>
-    <div id="unvan">Unvan: Acemi Tokatçı</div>
+    <div id="unvan">Unvan: Acemi</div>
+
+    <div class="health-container">
+        <div id="health-bar"></div>
+    </div>
 
     <div class="stage-container" id="stage">
         <div class="side-text">DAYAK ARSIZI</div>
         <div class="main-display">
             <img src="FURKAN.jpeg" id="furkan-img">
             <video id="main-video" playsinline></video>
-            
             <div id="suspect-panel">
-                <p id="suspect-question" style="color:#ffcc00; padding:15px; font-size: 1.2rem;"></p>
+                <p id="suspect-question" style="color:#ffcc00; padding:15px;"></p>
                 <div id="suspect-buttons"></div>
             </div>
         </div>
@@ -189,8 +146,6 @@
     </div>
 
     <button id="main-tokat-btn" class="tokat-btn" onclick="tokatla()">✋ TOKATLA ✋</button>
-    
-    <button class="share-btn" onclick="shareScore()">🟢 Skoru WhatsApp'ta Paylaş</button>
 
     <div class="grid-container" id="grid"></div>
 
@@ -204,124 +159,152 @@
         const gAudio = document.getElementById('general-audio');
         const counterText = document.getElementById('counter');
         const unvanText = document.getElementById('unvan');
+        const healthBar = document.getElementById('health-bar');
         const body = document.getElementById('body-main');
+        const mainBtn = document.getElementById('main-tokat-btn');
         const stage = document.getElementById('stage');
         const suspectPanel = document.getElementById('suspect-panel');
-        const suspectQuestion = document.getElementById('suspect-question');
-        const suspectButtons = document.getElementById('suspect-buttons');
-        const mainBtn = document.getElementById('main-tokat-btn');
 
         let count = parseInt(localStorage.getItem('tokatSayisi')) || 0;
+        let health = 100;
         let lastClips = [];
-        updateUnvan();
-        counterText.innerText = count;
+        let isGold = false;
 
-        const tepkiler = ["AH!", "YAVAŞ!", "😭😭😭", "😢", "ELİNE SAĞLIK!", "VURMAA!", "ANNEMEE DİCEM!", "😢😢", "KİM VURDU?", "ŞAPLAĞI YEDİK!"];
+        counterText.innerText = count;
+        updateUnvan();
+
+        const tepkiler = ["AH!", "YAVAŞ!", "😢", "ACIMADI!", "VURMA!", "YETER!", "😭😭😭"];
         const supheliler = ["Ali", "Mehmet", "Emre", "Recep", "Aşkım", "Annem"];
 
         function tokatla() {
-            count++;
-            counterText.innerText = count;
-            localStorage.setItem('tokatSayisi', count);
-            updateUnvan();
+            if (health <= 0) return;
 
-            // %15 İhtimalle Sorgu Modu
-            if (Math.random() < 0.15) {
-                askQuestion();
-                return;
+            // Altın Tokat Şansı (1/50)
+            if (isGold) {
+                count += 50;
+                isGold = false;
+                mainBtn.classList.remove('gold-tokat');
+                showAchievement("👑 ALTIN ŞAMAR!");
+            } else {
+                count++;
+                if (Math.random() < 0.02) {
+                    isGold = true;
+                    mainBtn.classList.add('gold-tokat');
+                }
             }
 
-            // FLAŞ VE SARSINTI EFEKTİ
+            counterText.innerText = count;
+            localStorage.setItem('tokatSayisi', count);
+            
+            // Can Sistemi
+            health -= 10;
+            healthBar.style.width = health + "%";
+            if (health <= 0) furkanBayildi();
+
+            // Kızarma ve Efektler
+            img.style.filter = `sepia(0.5) saturate(${2 + count/100}) hue-rotate(-${Math.min(count/5, 60)}deg)`;
             body.classList.add('shake-active', 'flash-effect');
             setTimeout(() => body.classList.remove('shake-active', 'flash-effect'), 200);
 
-            // KIZARMA (Max 1000 tokatta tam kızarıklık)
-            let redness = Math.min(count / 10, 100);
-            img.style.filter = `sepia(0.5) saturate(${1 + redness/50}) hue-rotate(-${redness/2}deg)`;
+            // Başarımlar
+            if (count == 1) showAchievement("🩸 İLK KAN");
+            if (count == 500) showAchievement("🥊 ZALİM TOKATÇI");
 
-            // BALON
+            // %10 İntikam Şansı
+            if (Math.random() < 0.05) furkanIntikam();
+
+            // %15 Sorgu Şansı
+            if (Math.random() < 0.15 && health > 0) { askQuestion(); return; }
+
+            // Balon ve Medya
+            createBalon();
+            playTokat();
+            updateUnvan();
+        }
+
+        function createBalon() {
             const b = document.createElement('div');
             b.className = 'balon';
             b.innerText = tepkiler[Math.floor(Math.random() * tepkiler.length)];
             b.style.top = Math.random() * 50 + "%";
             b.style.left = Math.random() * 60 + "%";
             stage.appendChild(b);
-            setTimeout(() => b.remove(), 600);
-
-            // KOMBO SİSTEMİ
-            const now = Date.now();
-            lastClips.push(now);
-            lastClips = lastClips.filter(t => now - t < 1500);
-            if(lastClips.length > 7) {
-                body.classList.add('combo-active');
-                setTimeout(() => body.classList.remove('combo-active'), 800);
-            }
-
-            playMedia();
+            setTimeout(() => b.remove(), 700);
         }
 
-        function updateUnvan() {
-            if(count < 100) unvanText.innerText = "Unvan: Acemi Tokatçı";
-            else if(count < 500) unvanText.innerText = "Unvan: Zalim Tokatçı";
-            else if(count < 1000) unvanText.innerText = "Unvan: Dayak Uzmanı";
-            else unvanText.innerText = "Unvan: EFSANE DAYAK ARSIZI";
+        function furkanBayildi() {
+            img.style.filter = "grayscale(1) blur(2px)";
+            mainBtn.innerText = "DİRİLİYOR...";
+            mainBtn.disabled = true;
+            setTimeout(() => {
+                health = 100;
+                healthBar.style.width = "100%";
+                img.style.filter = "none";
+                mainBtn.innerText = "✋ TOKATLA ✋";
+                mainBtn.disabled = false;
+                alert("Furkan: Dirildim gel buraya!");
+            }, 3000);
+        }
+
+        function furkanIntikam() {
+            document.getElementById('crack-screen').style.display = 'block';
+            body.style.backgroundColor = "#ff0000";
+            setTimeout(() => {
+                document.getElementById('crack-screen').style.display = 'none';
+                body.style.backgroundColor = "#0a0a0a";
+            }, 1000);
+        }
+
+        function showAchievement(txt) {
+            const box = document.getElementById('achievement-box');
+            box.innerText = "🏆 " + txt;
+            box.style.display = 'block';
+            setTimeout(() => box.style.display = 'none', 3000);
         }
 
         function askQuestion() {
             mainBtn.disabled = true;
-            const furkaninTahmini = supheliler[Math.floor(Math.random() * supheliler.length)];
+            const tahmini = supheliler[Math.floor(Math.random() * supheliler.length)];
             suspectPanel.style.display = 'flex';
-            suspectQuestion.innerHTML = `KİM VURDU LAN BANA?<br><br><b>${furkaninTahmini}</b> vurdu demi?`;
-            suspectButtons.innerHTML = '';
-
+            document.getElementById('suspect-question').innerHTML = `KİM VURDU? <br><br><b>${tahmini}</b> vurdu demi?`;
+            const sButtons = document.getElementById('suspect-buttons');
+            sButtons.innerHTML = '';
             supheliler.forEach(s => {
                 const btn = document.createElement('button');
                 btn.className = 'suspect-btn';
                 btn.innerText = s;
                 btn.onclick = () => {
-                    if (s === furkaninTahmini) {
-                        alert("YAKALANDIN! \nFurkan: Vay hain " + s + ", biliyordum senin olduğunu!");
-                    } else {
-                        alert("Furkan: Senden hiç beklemezdim " + s + "... Beni kandırma!");
-                    }
+                    alert(s === tahmini ? "YAKALANDIN! Vay hain!" : "Kandırıyor beni...");
                     suspectPanel.style.display = 'none';
                     mainBtn.disabled = false;
                 };
-                suspectButtons.appendChild(btn);
+                sButtons.appendChild(btn);
             });
         }
 
-        function playMedia() {
-            vdo.src = "TOKAT.mp4";
-            vdo.style.display = 'block';
-            vdo.currentTime = 0;
-            vdo.play().catch(()=>{});
-            tSes.currentTime = 0;
-            tSes.play().catch(()=>{});
+        function playTokat() {
+            vdo.src = "TOKAT.mp4"; vdo.style.display = 'block'; vdo.play().catch(()=>{});
+            tSes.currentTime = 0; tSes.play().catch(()=>{});
             vdo.onended = () => vdo.style.display = 'none';
         }
 
-        function shareScore() {
-            const msg = `Furkan'ı tam ${count} kez tokatladım ve "${unvanText.innerText}" unvanını aldım! Hadi sen de tokatla: [SITE_LINKINIZ]`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        function updateUnvan() {
+            if(count < 100) unvanText.innerText = "Unvan: Acemi";
+            else if(count < 500) unvanText.innerText = "Unvan: Zalim";
+            else unvanText.innerText = "Unvan: DAYAK ARSIZI";
         }
 
-        // 30 Buton
+        // 30 Buton Başlatıcı
         const grid = document.getElementById('grid');
         for (let i = 1; i <= 30; i++) {
-            const btn = document.createElement('button');
-            btn.className = 'num-btn';
-            btn.innerText = i;
-            btn.style.backgroundColor = `hsl(${i * 137.5}, 60%, 40%)`;
-            btn.onclick = () => {
+            const b = document.createElement('button');
+            b.className = 'num-btn'; b.innerText = i;
+            b.style.backgroundColor = `hsl(${i * 137.5}, 60%, 40%)`;
+            b.onclick = () => {
                 gAudio.src = i + ".mp3";
-                gAudio.play().catch(() => {
-                    vdo.src = i + ".mp4";
-                    vdo.style.display = 'block';
-                    vdo.play();
-                });
+                gAudio.play().catch(() => { vdo.src = i + ".mp4"; vdo.style.display='block'; vdo.play(); });
             };
-            grid.appendChild(btn);
+            grid.appendChild(b);
         }
     </script>
 </body>
