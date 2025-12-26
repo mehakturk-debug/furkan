@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dayak Arsızı Furkan - ULTRA MOD v4</title>
+    <title>Dayak Arsızı Furkan - DRAMA MOD</title>
     <style>
         /* --- ANİMASYONLAR --- */
         @keyframes shake {
@@ -11,22 +11,16 @@
             10% { transform: translate(-1px, -2px) rotate(-1deg); }
             20% { transform: translate(-3px, 0px) rotate(1deg); }
             30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
-
         @keyframes combo-bg {
             0% { background-color: #ff0000; }
-            33% { background-color: #00ff00; }
-            66% { background-color: #0000ff; }
-            100% { background-color: #ff0000; }
+            50% { background-color: #00ff00; }
+            100% { background-color: #0000ff; }
         }
-
         .shake-active { animation: shake 0.2s infinite; }
         .combo-active { animation: combo-bg 0.1s infinite !important; }
 
-        /* --- GENEL TASARIM --- */
         body {
             font-family: 'Arial Black', sans-serif;
             background-color: #0a0a0a;
@@ -37,31 +31,14 @@
             padding: 20px;
             margin: 0;
             overflow-x: hidden;
-            transition: background-color 0.1s;
         }
 
         .hit-bg { background-color: #440000; }
 
-        /* BİLGİLENDİRME PANELİ */
-        .info-panel {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px dashed #ff4757;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            max-width: 600px;
-            text-align: left;
-        }
-        .info-panel h3 { margin-top: 0; color: #ffcc00; text-align: center; }
-        .info-panel ul { list-style: none; padding: 0; margin: 0; }
-        .info-panel li { margin-bottom: 8px; font-size: 0.9rem; border-bottom: 1px solid #222; padding-bottom: 4px; }
-        .info-panel b { color: #ff4757; }
-
         .counter-box {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: #ffcc00;
             margin-bottom: 20px;
-            text-shadow: 0 0 15px rgba(255, 204, 0, 0.7);
         }
 
         .stage-container {
@@ -74,24 +51,22 @@
         }
 
         .side-text {
-            font-size: 5rem;
+            font-size: 4rem;
             font-weight: 900;
             color: #ff4757;
             writing-mode: vertical-rl;
             text-transform: uppercase;
-            text-shadow: 4px 4px 0px #fff, 8px 8px 0px #000;
-            user-select: none;
+            text-shadow: 4px 4px 0px #fff;
         }
 
         .main-display {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: 350px;
+            height: 350px;
             background: #000;
             border-radius: 20px;
             overflow: hidden;
             border: 8px solid #ff4757;
-            box-shadow: 0 0 50px rgba(255, 71, 87, 0.5);
         }
 
         #furkan-img, #main-video {
@@ -102,79 +77,95 @@
 
         #main-video { display: none; z-index: 2; }
 
+        /* Konuşma Balonları */
         .balon {
             position: absolute;
             background: white;
             color: black;
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: 10px 15px;
+            border-radius: 15px;
             font-weight: bold;
-            font-size: 1.5rem;
-            border: 3px solid black;
+            font-size: 1.2rem;
+            border: 2px solid black;
             z-index: 100;
             pointer-events: none;
         }
 
+        /* Suçlu Seçim Paneli */
+        #suspect-panel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #ffcc00;
+            z-index: 200;
+            display: none;
+            text-align: center;
+            width: 80%;
+        }
+
+        .suspect-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
         .tokat-btn {
-            padding: 20px 60px;
-            font-size: 2.5rem;
+            padding: 15px 50px;
+            font-size: 2rem;
             background: #ff4757;
             color: white;
             border: 4px solid white;
             border-radius: 100px;
             cursor: pointer;
-            font-weight: 900;
-            box-shadow: 0 10px 0px #b33939;
-            margin-bottom: 40px;
-            transition: 0.1s;
+            margin-bottom: 30px;
         }
-
-        .tokat-btn:active { transform: translateY(5px); box-shadow: 0 5px 0px #b33939; }
 
         .grid-container {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
-            gap: 10px;
+            gap: 8px;
             background: #1a1a1a;
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 50px;
+            padding: 15px;
+            border-radius: 15px;
         }
 
-        .num-btn { width: 60px; height: 60px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .num-btn:hover { transform: scale(1.1); }
+        .num-btn { width: 50px; height: 50px; border: none; border-radius: 8px; color: white; cursor: pointer; }
 
         @media (max-width: 800px) {
-            .side-text { font-size: 2rem; }
-            .main-display { width: 280px; height: 280px; }
+            .side-text { font-size: 1.5rem; }
+            .main-display { width: 250px; height: 250px; }
             .grid-container { grid-template-columns: repeat(5, 1fr); }
         }
     </style>
 </head>
 <body id="body-main">
 
-    <div class="info-panel">
-        <h3>📖 FURKAN'I TOKATLAMA REHBERİ</h3>
-        <ul>
-            <li>✋ <b>TOKATLA:</b> Furkan'ı sarsar, ses çıkarır ve tepki balonları açar.</li>
-            <li>😡 <b>KIZARMA:</b> Sen vurdukça Furkan'ın suratı kıpkırmızı olur.</li>
-            <li>🔥 <b>KOMBO MODU:</b> Çok hızlı tokatlarsan ekran çılgınca yanıp söner!</li>
-            <li>🎵 <b>1-30 PANELİ:</b> Alttaki butonlardan özel ses/videoları keşfet.</li>
-        </ul>
-    </div>
-
-    <div class="counter-box">TOPLAM TOKAT: <span id="counter">0</span></div>
+    <div class="counter-box">TOKAT: <span id="counter">0</span></div>
 
     <div class="stage-container" id="stage">
         <div class="side-text">DAYAK ARSIZI</div>
         <div class="main-display">
             <img src="FURKAN.jpeg" id="furkan-img">
             <video id="main-video" playsinline></video>
+            
+            <div id="suspect-panel">
+                <p id="suspect-text" style="color:#ffcc00; margin-bottom:10px;"></p>
+                <div id="suspect-buttons"></div>
+            </div>
         </div>
         <div class="side-text">FURKAN</div>
     </div>
 
-    <button class="tokat-btn" onclick="tokatla()">✋ TOKATLA ✋</button>
+    <button id="main-tokat-btn" class="tokat-btn" onclick="tokatla()">✋ TOKATLA ✋</button>
 
     <div class="grid-container" id="grid"></div>
 
@@ -189,35 +180,46 @@
         const counterText = document.getElementById('counter');
         const body = document.getElementById('body-main');
         const stage = document.getElementById('stage');
+        const suspectPanel = document.getElementById('suspect-panel');
+        const suspectText = document.getElementById('suspect-text');
+        const suspectButtons = document.getElementById('suspect-buttons');
+        const mainBtn = document.getElementById('main-tokat-btn');
 
         let count = parseInt(localStorage.getItem('tokatSayisi')) || 0;
         let lastClips = [];
         counterText.innerText = count;
+
+        const tepkiler = ["AH!", "YAVAŞ!", "ACIMADI!", "😭😭😭", "😢", "ELİNE SAĞLIK!", "VURMAA!", "ÜHÜÜÜ 😭", "ANNEMEE DİCEM!", "YETER DA!", "😢😢"];
+        const supheliler = ["Ali", "Mehmet", "Emre", "Recep", "Aşkım", "Annem"];
 
         function tokatla() {
             count++;
             counterText.innerText = count;
             localStorage.setItem('tokatSayisi', count);
 
-            // 1. KIZARMA EFEKTİ
-            let redness = Math.min(count * 2, 100);
-            img.style.filter = `sepia(0.5) saturate(2) hue-rotate(-50deg) brightness(${1.2 - (redness/200)})`;
+            // Rastgele Suçlu Sorma Olayı (%15 ihtimal)
+            if (Math.random() < 0.15) {
+                askWhoHit();
+                return;
+            }
 
-            // 2. KONUŞMA BALONU
-            const msj = ["AH!", "YAVAŞ!", "ACIMADI!", "Bİ DAHA!", "YETER!", "OOF!", "ELİNE SAĞLIK!", "DAYAK ARSIZIYIM!", "VUR VUR!"];
+            // Normal Tokat İşlemleri
+            img.style.filter = `sepia(0.5) saturate(2) hue-rotate(-50deg) brightness(${1.2 - (count/500)})`;
+
+            // Balon oluştur
             const b = document.createElement('div');
             b.className = 'balon';
-            b.innerText = msj[Math.floor(Math.random() * msj.length)];
-            b.style.top = Math.random() * 60 + "%";
-            b.style.left = Math.random() * 70 + "%";
+            b.innerText = tepkiler[Math.floor(Math.random() * tepkiler.length)];
+            b.style.top = Math.random() * 50 + "%";
+            b.style.left = Math.random() * 60 + "%";
             stage.appendChild(b);
-            setTimeout(() => b.remove(), 700);
+            setTimeout(() => b.remove(), 800);
 
-            // 3. SARSINTI VE RENK EFEKTİ
+            // Efektler
             body.classList.add('shake-active', 'hit-bg');
             setTimeout(() => body.classList.remove('shake-active', 'hit-bg'), 400);
 
-            // 4. KOMBO SİSTEMİ
+            // Kombo
             const now = Date.now();
             lastClips.push(now);
             lastClips = lastClips.filter(t => now - t < 2000);
@@ -226,33 +228,50 @@
                 setTimeout(() => body.classList.remove('combo-active'), 1000);
             }
 
-            // 5. TOKAT VİDEOSU VE SESİ
+            playMedia();
+        }
+
+        function askWhoHit() {
+            mainBtn.disabled = true;
+            suspectPanel.style.display = 'block';
+            suspectText.innerText = "KİM VURDU LAN BANA? Sen vurdun demi?";
+            suspectButtons.innerHTML = '';
+            
+            supheliler.forEach(s => {
+                const btn = document.createElement('button');
+                btn.className = 'suspect-btn';
+                btn.innerText = s;
+                btn.onclick = () => {
+                    alert("Furkan: " + s + " mi vurdu? Vay hain!");
+                    suspectPanel.style.display = 'none';
+                    mainBtn.disabled = false;
+                };
+                suspectButtons.appendChild(btn);
+            });
+        }
+
+        function playMedia() {
             vdo.src = "TOKAT.mp4";
             vdo.style.display = 'block';
             vdo.currentTime = 0;
-            vdo.play().catch(() => {});
-            
+            vdo.play().catch(()=>{});
             tSes.currentTime = 0;
-            tSes.play().catch(() => {});
-
-            vdo.onended = () => { vdo.style.display = 'none'; };
+            tSes.play().catch(()=>{});
+            vdo.onended = () => vdo.style.display = 'none';
         }
 
-        // 30 ADET ÖZEL BUTON
         const grid = document.getElementById('grid');
         for (let i = 1; i <= 30; i++) {
             const btn = document.createElement('button');
             btn.className = 'num-btn';
             btn.innerText = i;
-            btn.style.backgroundColor = `hsl(${i * 137}, 60%, 45%)`;
+            btn.style.backgroundColor = `hsl(${i * 137}, 60%, 40%)`;
             btn.onclick = () => {
-                // Önce mp3 dene
                 gAudio.src = i + ".mp3";
                 gAudio.play().catch(() => {
-                    // mp3 yoksa videoyu (.mp4) dene
                     vdo.src = i + ".mp4";
                     vdo.style.display = 'block';
-                    vdo.play().catch(() => console.log(i + " dosyası bulunamadı."));
+                    vdo.play();
                 });
             };
             grid.appendChild(btn);
