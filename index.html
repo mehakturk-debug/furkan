@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dayak Arsızı Furkan - DRAMA MOD</title>
+    <title>Dayak Arsızı Furkan - DEDEKTİF MOD</title>
     <style>
         /* --- ANİMASYONLAR --- */
         @keyframes shake {
@@ -30,33 +30,43 @@
             align-items: center;
             padding: 20px;
             margin: 0;
-            overflow-x: hidden;
         }
 
-        .hit-bg { background-color: #440000; }
+        /* TALİMATLAR PANELİ */
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed #ff4757;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            max-width: 600px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .instructions b { color: #ffcc00; }
 
         .counter-box {
             font-size: 2.5rem;
             color: #ffcc00;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .stage-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 40px;
-            margin-bottom: 30px;
+            gap: 20px;
+            margin-bottom: 20px;
             position: relative;
         }
 
         .side-text {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 900;
             color: #ff4757;
             writing-mode: vertical-rl;
             text-transform: uppercase;
-            text-shadow: 4px 4px 0px #fff;
+            text-shadow: 3px 3px 0px #fff;
         }
 
         .main-display {
@@ -82,41 +92,36 @@
             position: absolute;
             background: white;
             color: black;
-            padding: 10px 15px;
+            padding: 10px;
             border-radius: 15px;
             font-weight: bold;
-            font-size: 1.2rem;
-            border: 2px solid black;
             z-index: 100;
-            pointer-events: none;
         }
 
         /* Suçlu Seçim Paneli */
         #suspect-panel {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.95);
-            padding: 20px;
-            border-radius: 15px;
-            border: 3px solid #ffcc00;
-            z-index: 200;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
             display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 300;
             text-align: center;
-            width: 80%;
         }
 
         .suspect-btn {
-            background: #ff4757;
+            background: #444;
             color: white;
-            border: none;
-            padding: 10px;
+            border: 2px solid #fff;
+            padding: 8px 15px;
             margin: 5px;
             border-radius: 5px;
             cursor: pointer;
-            font-weight: bold;
+            font-size: 1rem;
         }
+        .suspect-btn:hover { background: #ff4757; }
 
         .tokat-btn {
             padding: 15px 50px;
@@ -126,28 +131,25 @@
             border: 4px solid white;
             border-radius: 100px;
             cursor: pointer;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .grid-container {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
             gap: 8px;
-            background: #1a1a1a;
-            padding: 15px;
-            border-radius: 15px;
         }
 
         .num-btn { width: 50px; height: 50px; border: none; border-radius: 8px; color: white; cursor: pointer; }
-
-        @media (max-width: 800px) {
-            .side-text { font-size: 1.5rem; }
-            .main-display { width: 250px; height: 250px; }
-            .grid-container { grid-template-columns: repeat(5, 1fr); }
-        }
     </style>
 </head>
 <body id="body-main">
+
+    <div class="instructions">
+        <b>NASIL OYNANIR:</b> Tokatla butonuna basarak Furkan'ı sars! <br>
+        Furkan bazen durup <b>suçlu tahmini</b> yapar. Eğer doğruyu seçersen <b>YAKALANDIN!</b> yazısı çıkar. <br>
+        Alt panelden (1-30) Furkan'ın özel arşivini açabilirsin.
+    </div>
 
     <div class="counter-box">TOKAT: <span id="counter">0</span></div>
 
@@ -158,7 +160,7 @@
             <video id="main-video" playsinline></video>
             
             <div id="suspect-panel">
-                <p id="suspect-text" style="color:#ffcc00; margin-bottom:10px;"></p>
+                <p id="suspect-question" style="color:#ffcc00; padding:10px;"></p>
                 <div id="suspect-buttons"></div>
             </div>
         </div>
@@ -181,7 +183,7 @@
         const body = document.getElementById('body-main');
         const stage = document.getElementById('stage');
         const suspectPanel = document.getElementById('suspect-panel');
-        const suspectText = document.getElementById('suspect-text');
+        const suspectQuestion = document.getElementById('suspect-question');
         const suspectButtons = document.getElementById('suspect-buttons');
         const mainBtn = document.getElementById('main-tokat-btn');
 
@@ -189,7 +191,7 @@
         let lastClips = [];
         counterText.innerText = count;
 
-        const tepkiler = ["AH!", "YAVAŞ!", "ACIMADI!", "😭😭😭", "😢", "ELİNE SAĞLIK!", "VURMAA!", "ÜHÜÜÜ 😭", "ANNEMEE DİCEM!", "YETER DA!", "😢😢"];
+        const tepkiler = ["AH!", "YAVAŞ!", "😭😭😭", "😢", "ELİNE SAĞLIK!", "VURMAA!", "ANNEMEE DİCEM!", "😢😢"];
         const supheliler = ["Ali", "Mehmet", "Emre", "Recep", "Aşkım", "Annem"];
 
         function tokatla() {
@@ -197,52 +199,46 @@
             counterText.innerText = count;
             localStorage.setItem('tokatSayisi', count);
 
-            // Rastgele Suçlu Sorma Olayı (%15 ihtimal)
             if (Math.random() < 0.15) {
-                askWhoHit();
+                askQuestion();
                 return;
             }
 
-            // Normal Tokat İşlemleri
-            img.style.filter = `sepia(0.5) saturate(2) hue-rotate(-50deg) brightness(${1.2 - (count/500)})`;
+            img.style.filter = `sepia(0.5) saturate(2) hue-rotate(-50deg) brightness(${1.2 - (count/1000)})`;
 
-            // Balon oluştur
             const b = document.createElement('div');
             b.className = 'balon';
             b.innerText = tepkiler[Math.floor(Math.random() * tepkiler.length)];
             b.style.top = Math.random() * 50 + "%";
             b.style.left = Math.random() * 60 + "%";
             stage.appendChild(b);
-            setTimeout(() => b.remove(), 800);
+            setTimeout(() => b.remove(), 700);
 
-            // Efektler
-            body.classList.add('shake-active', 'hit-bg');
-            setTimeout(() => body.classList.remove('shake-active', 'hit-bg'), 400);
-
-            // Kombo
-            const now = Date.now();
-            lastClips.push(now);
-            lastClips = lastClips.filter(t => now - t < 2000);
-            if(lastClips.length > 8) {
-                body.classList.add('combo-active');
-                setTimeout(() => body.classList.remove('combo-active'), 1000);
-            }
+            body.classList.add('shake-active');
+            setTimeout(() => body.classList.remove('shake-active'), 300);
 
             playMedia();
         }
 
-        function askWhoHit() {
+        function askQuestion() {
             mainBtn.disabled = true;
-            suspectPanel.style.display = 'block';
-            suspectText.innerText = "KİM VURDU LAN BANA? Sen vurdun demi?";
-            suspectButtons.innerHTML = '';
+            // Furkan rastgele birini suçluyor
+            const furkaninTahmini = supheliler[Math.floor(Math.random() * supheliler.length)];
             
+            suspectPanel.style.display = 'flex';
+            suspectQuestion.innerHTML = `KİM VURDU LAN BANA?<br><br><b>${furkaninTahmini}</b> vurdu demi?`;
+            suspectButtons.innerHTML = '';
+
             supheliler.forEach(s => {
                 const btn = document.createElement('button');
                 btn.className = 'suspect-btn';
                 btn.innerText = s;
                 btn.onclick = () => {
-                    alert("Furkan: " + s + " mi vurdu? Vay hain!");
+                    if (s === furkaninTahmini) {
+                        alert("YAKALANDIN! \nFurkan: Vay hain " + s + ", biliyordum senin olduğunu!");
+                    } else {
+                        alert("Furkan: Senden hiç beklemezdim... Beni kandırma!");
+                    }
                     suspectPanel.style.display = 'none';
                     mainBtn.disabled = false;
                 };
