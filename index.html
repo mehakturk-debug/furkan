@@ -3,67 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Furkan Tokatla - Split Panel</title>
+    <title>Furkan Tokatla v3</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #121212;
+            background-color: #0f0f0f;
             color: white;
-            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
         }
 
-        .main-layout {
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            gap: 30px;
-            padding: 40px;
-            flex-wrap: wrap;
-        }
-
-        /* Yan Buton Panelleri */
-        .side-panel {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 sütunlu 15 buton */
-            gap: 10px;
-            background: #1e1e1e;
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px solid #333;
-        }
-
-        /* Orta Alan */
-        .center-panel {
-            text-align: center;
-            max-width: 400px;
-        }
-
+        /* Sayaç */
         .counter-box {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: bold;
-            color: #ffcc00;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+            color: #00ffcc;
+            background: #1a1a1a;
+            padding: 10px 40px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
         }
 
-        #furkan-img, #tokat-video {
-            width: 300px;
-            height: 300px;
-            object-fit: cover;
+        /* Ana Görsel Alanı */
+        .main-display {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            margin-bottom: 30px;
+            background: #000;
             border-radius: 20px;
+            overflow: hidden;
             border: 4px solid #ff4757;
         }
 
-        #tokat-video { display: none; }
+        #furkan-img, #main-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #main-video { display: none; z-index: 2; }
+        #furkan-img { z-index: 1; }
 
         .tokat-btn {
-            margin-top: 20px;
-            padding: 15px 40px;
-            font-size: 1.5rem;
+            padding: 15px 50px;
+            font-size: 1.8rem;
             background: linear-gradient(45deg, #ff4757, #ff6b81);
             color: white;
             border: none;
@@ -71,99 +63,118 @@
             cursor: pointer;
             font-weight: bold;
             box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4);
+            margin-bottom: 40px;
             transition: 0.2s;
         }
 
-        .tokat-btn:hover { transform: scale(1.1); }
+        .tokat-btn:hover { transform: scale(1.05); }
+        .tokat-btn:active { transform: scale(0.95); }
 
-        /* Numaralı Butonlar */
+        /* Buton Paneli (Altta) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+            width: 100%;
+            max-width: 800px;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
         .num-btn {
-            width: 50px;
-            height: 50px;
+            aspect-ratio: 1/1;
             border: none;
             border-radius: 10px;
             color: white;
             font-weight: bold;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: 0.2s;
         }
 
-        .num-btn:hover { filter: brightness(1.3); transform: translateY(-3px); }
-
-        @media (max-width: 900px) {
-            .main-layout { flex-direction: column; align-items: center; }
-        }
+        .num-btn:hover { transform: scale(1.1); filter: brightness(1.2); }
     </style>
 </head>
 <body>
 
-    <h1 style="margin-top: 20px;">FURKAN'I TOKATLA v2</h1>
+    <div class="counter-box">TOKAT: <span id="counter">0</span></div>
 
-    <div class="main-layout">
-        <div class="side-panel" id="left-panel"></div>
-
-        <div class="center-panel">
-            <div class="counter-box">TOKAT: <span id="counter">0</span></div>
-            <img src="FURKAN.jpeg" id="furkan-img" alt="Furkan">
-            <video id="tokat-video" src="TOKAT.mp4" playsinline></video>
-            <br>
-            <button class="tokat-btn" onclick="tokatla()">✋ TOKATLA ✋</button>
-        </div>
-
-        <div class="side-panel" id="right-panel"></div>
+    <div class="main-display">
+        <img src="FURKAN.jpeg" id="furkan-img">
+        <video id="main-video" playsinline></video>
     </div>
 
+    <button class="tokat-btn" onclick="tokatla()">✋ TOKATLA ✋</button>
+
+    <div class="grid-container" id="grid">
+        </div>
+
     <audio id="tokat-ses" src="TOKAT_SESI.mp3"></audio>
-    <audio id="other-audio"></audio>
+    <audio id="general-audio"></audio>
 
     <script>
-        const leftPanel = document.getElementById('left-panel');
-        const rightPanel = document.getElementById('right-panel');
         const img = document.getElementById('furkan-img');
-        const vdo = document.getElementById('tokat-video');
+        const vdo = document.getElementById('main-video');
         const tSes = document.getElementById('tokat-ses');
+        const gAudio = document.getElementById('general-audio');
         const counterText = document.getElementById('counter');
-        const audioPlayer = document.getElementById('other-audio');
 
         let count = parseInt(localStorage.getItem('tokatSayisi')) || 0;
         counterText.innerText = count;
 
+        // TOKATLA FONKSİYONU
         function tokatla() {
             count++;
             counterText.innerText = count;
             localStorage.setItem('tokatSayisi', count);
 
-            img.style.display = 'none';
-            vdo.style.display = 'block';
-            
+            playMedia("TOKAT", "mp4");
             tSes.currentTime = 0;
-            tSes.play().catch(e => console.log("Ses çalmadı"));
-            
-            vdo.currentTime = 0;
-            vdo.play();
+            tSes.play().catch(() => console.log("Tokat sesi bulunamadı."));
+        }
 
+        // GENEL MEDYA OYNATMA (Video veya Ses)
+        function playMedia(fileName, type) {
+            // Her şeyi durdur
+            vdo.pause();
+            gAudio.pause();
+            vdo.style.display = 'none';
+
+            if (type === "mp4") {
+                vdo.src = fileName + ".mp4";
+                vdo.style.display = 'block';
+                vdo.currentTime = 0;
+                vdo.play().catch(() => {
+                    // Eğer mp4 başarısız olursa mp3 dene (Tokat hariç butonlar için)
+                    if(fileName !== "TOKAT") playMedia(fileName, "mp3");
+                });
+            } else {
+                gAudio.src = fileName + ".mp3";
+                gAudio.currentTime = 0;
+                gAudio.play().catch(() => console.log(fileName + ".mp3 bulunamadı."));
+            }
+
+            // Video bittiğinde resmi geri getir
             vdo.onended = () => {
                 vdo.style.display = 'none';
-                img.style.display = 'block';
             };
         }
 
-        // Butonları Dağıtma
+        // 30 BUTON OLUŞTURMA
+        const grid = document.getElementById('grid');
         for (let i = 1; i <= 30; i++) {
             const b = document.createElement('button');
             b.className = 'num-btn';
             b.innerText = i;
-            b.style.backgroundColor = `hsl(${i * 12}, 60%, 40%)`;
+            b.style.backgroundColor = `hsl(${i * 60}, 60%, 45%)`;
+            
             b.onclick = () => {
-                audioPlayer.src = `${i}.mp3`;
-                audioPlayer.play();
+                // Her buton önce video (.mp4) dener, yoksa ses (.mp3) çalar
+                playMedia(i, "mp4");
             };
-
-            if (i <= 15) {
-                leftPanel.appendChild(b);
-            } else {
-                rightPanel.appendChild(b);
-            }
+            
+            grid.appendChild(b);
         }
     </script>
 </body>
