@@ -3,18 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Furkan Tokatla - KOMİK ARKA PLAN MOD</title>
+    <title>Furkan Tokatla - OYUN MODU</title>
     <style>
-        /* --- YENİ KOMİK ARKA PLAN TASARIMI --- */
+        /* --- YENİ OYUN KURALLARI VE ARKA PLAN TASARIMI --- */
         body {
             font-family: 'Arial Black', sans-serif;
             background-color: #0a0a0a;
-            /* Tokat emojilerinden oluşan desenli arka plan */
-            background-image: radial-gradient(#1a1a1a 2px, transparent 2px), 
-                              linear-gradient(45deg, #121212 25%, transparent 25%, transparent 75%, #121212 75%, #121212), 
-                              linear-gradient(45deg, #121212 25%, transparent 25%, transparent 75%, #121212 75%, #121212);
-            background-size: 30px 30px, 60px 60px, 60px 60px;
-            background-position: 0 0, 0 0, 30px 30px;
             color: white;
             display: flex;
             flex-direction: column;
@@ -25,20 +19,47 @@
             transition: background 0.5s, filter 0.1s;
         }
 
-        /* Sayfa arkasında yüzen büyük şeffaf emojiler */
+        /* Arka plan emojileri - Komik ve agresif */
         body::before {
-            content: "✋ 💥 🥊 ✋ 💢";
+            content: "🥊 💥 👊 ✋ 💢"; /* Daha fazla ve uygun emoji */
             position: fixed;
-            font-size: 15rem;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.03;
+            font-size: 10rem; /* Boyutunu biraz küçülttüm, daha az boğucu */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap; /* Emojilerin sığması için */
+            opacity: 0.05; /* Biraz daha belirgin */
             z-index: -1;
-            white-space: nowrap;
+            animation: background-move 60s linear infinite; /* Yavaşça hareket etsinler */
+        }
+        @keyframes background-move {
+            from { transform: rotate(0deg) translateX(0); }
+            to { transform: rotate(360deg) translateX(100px); } /* Dönsün ve hafifçe kaysın */
         }
 
-        /* --- ANİMASYONLAR --- */
+        /* --- OYUN KURALLARI KUTUSU --- */
+        .game-rules {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid #ffcc00; /* Altın sarısı çerçeve */
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            max-width: 700px;
+            text-align: left;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        .game-rules h3 { color: #ffcc00; text-align: center; margin-bottom: 15px; }
+        .game-rules ul { list-style: none; padding: 0; margin: 0; }
+        .game-rules li { margin-bottom: 8px; font-size: 0.95rem; border-bottom: 1px dotted rgba(255,255,255,0.2); padding-bottom: 4px; }
+        .game-rules b { color: #ff4757; } /* Kırmızı vurgu */
+        .game-rules li:last-child { border-bottom: none; }
+
+
+        /* --- DİĞER CSS TANIMLAMALARI (Öncekiyle aynı) --- */
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             20% { transform: translate(-3px, 0px) rotate(1deg); }
@@ -55,6 +76,8 @@
         .shake-active { animation: shake 0.2s infinite; }
         .combo-active { animation: combo-bg 0.1s infinite !important; }
         .flash-effect { filter: brightness(2.5) contrast(1.5); }
+
+        button { touch-action: manipulation; } /* Mobil hızlandırma */
 
         /* CAN BARI */
         .health-container {
@@ -120,6 +143,16 @@
             background: rgba(0,0,0,0.95); display: none;
             flex-direction: column; justify-content: center; align-items: center; z-index: 300;
         }
+        .suspect-btn {
+            background: #ff4757;
+            color: white;
+            border: 2px solid #fff;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
         .tokat-btn {
             padding: 20px 60px; font-size: 2.5rem; background: #ff4757;
@@ -138,12 +171,36 @@
             color: #000; padding: 15px; border-radius: 10px; display: none;
             font-weight: bold; box-shadow: 0 0 15px rgba(0,0,0,0.5); z-index: 1000;
         }
+
+        /* Responsive ayarlar */
+        @media (max-width: 800px) {
+            .side-text { font-size: 1.5rem; }
+            .main-display { width: 280px; height: 280px; }
+            .grid-container { grid-template-columns: repeat(5, 1fr); }
+            .tokat-btn { padding: 15px 40px; font-size: 2rem; }
+            .game-rules { max-width: 90%; font-size: 0.8rem; }
+            body::before { font-size: 5rem; } /* Emojileri küçült */
+        }
     </style>
 </head>
 <body id="body-main">
 
     <div id="crack-screen"></div>
     <div id="achievement-box">🏆 BAŞARIM AÇILDI!</div>
+
+    <div class="game-rules">
+        <h3>🎮 OYUN KURALLARI VE İPUÇLARI</h3>
+        <ul>
+            <li><b>Tokatla Butonu:</b> Furkan'a haddini bildir. Her tokat canını azaltır!</li>
+            <li><b>Can Barı:</b> Furkan'ın canını takip et. Canı bitince kısa süre bayılır ve sonra daha sinirli döner!</li>
+            <li><b>Altın Tokat:</b> Bazen buton altın parlar. O an basarsan +50 tokat kazanırsın!</li>
+            <li><b>Furkan'ın İntikamı:</b> Dikkat! Bazen Furkan karşı saldırıya geçip ekranını çatlatır.</li>
+            <li><b>Kim Vurdu?:</b> Furkan bazen suçlu tahmini yapar. Doğruyu bulursan "YAKALANDIN!" der.</li>
+            <li><b>Unvan Sistemi:</b> Attığın tokat sayısına göre yeni unvanlar kazanırsın.</li>
+            <li><b>Başarımlar:</b> Gizli hedeflere ulaş ve özel başarımlar kazan.</li>
+            <li><b>Medya Paneli (1-30):</b> Furkan'ın özel anlarını izle veya dinle.</li>
+        </ul>
+    </div>
 
     <div class="counter-box">TOKAT: <span id="counter">0</span></div>
     <div id="unvan">Unvan: Acemi</div>
@@ -193,7 +250,7 @@
         counterText.innerText = count;
         updateUnvan();
 
-        const tepkiler = ["AH!", "YAVAŞ!", "😢", "ACIMADI!", "VURMA!", "YETER!", "😭😭😭", "ŞLAP!", "KÜT!"];
+        const tepkiler = ["AH!", "YAVAŞ!", "😢", "ACIMADI!", "VURMA!", "YETER!", "😭😭😭", "ŞLAP!", "KÜT!", "Aİİİ!"];
         const supheliler = ["Ali", "Mehmet", "Emre", "Recep", "Aşkım", "Annem"];
 
         function tokatla() {
@@ -206,7 +263,7 @@
                 showAchievement("👑 ALTIN ŞAMAR!");
             } else {
                 count++;
-                if (Math.random() < 0.02) {
+                if (Math.random() < 0.02) { // %2 ihtimalle Altın Tokat çıksın
                     isGold = true;
                     mainBtn.classList.add('gold-tokat');
                 }
@@ -219,7 +276,6 @@
             healthBar.style.width = health + "%";
             if (health <= 0) furkanBayildi();
 
-            // Kızarma şiddetini artırdım
             img.style.filter = `sepia(0.5) saturate(${2 + count/50}) hue-rotate(-${Math.min(count/3, 80)}deg)`;
             
             body.classList.add('shake-active', 'flash-effect');
@@ -227,9 +283,10 @@
 
             if (count == 1) showAchievement("🩸 İLK KAN");
             if (count == 500) showAchievement("🥊 ZALİM TOKATÇI");
+            if (count == 1000) showAchievement("🏆 DAYAK ARŞİVİSTİ");
 
-            if (Math.random() < 0.05) furkanIntikam();
-            if (Math.random() < 0.15 && health > 0) { askQuestion(); return; }
+            if (Math.random() < 0.05) furkanIntikam(); // %5 ihtimalle intikam
+            if (Math.random() < 0.15 && health > 0) { askQuestion(); return; } // %15 ihtimalle soru
 
             createBalon();
             playTokat();
@@ -305,7 +362,8 @@
         function updateUnvan() {
             if(count < 100) unvanText.innerText = "Unvan: Acemi Tokatçı";
             else if(count < 500) unvanText.innerText = "Unvan: Zalim Tokatçı";
-            else unvanText.innerText = "Unvan: EBEDİ DAYAK ARSIZI";
+            else if(count < 1000) unvanText.innerText = "Unvan: Dayak Arsızı Ustası";
+            else unvanText.innerText = "Unvan: EBEDİ DAYAK ARSİSTİ";
         }
 
         const grid = document.getElementById('grid');
