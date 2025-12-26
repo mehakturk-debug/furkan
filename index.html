@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dayak Arsızı Furkan - PRO OYUN MODU</title>
+    <title>Dayak Arsızı Furkan - Eye of the Tiger Edition</title>
     <style>
-        /* --- ARKA PLAN VE KARIŞIK EMOJİLER --- */
+        /* --- ARKA PLAN VE HAREKETLİ EMOJİLER --- */
         body {
             font-family: 'Arial Black', sans-serif;
             background-color: #050505;
@@ -20,25 +20,28 @@
             min-height: 100vh;
         }
 
-        /* Emojiler */
+        /* Emojilerin sürekli hareket etmesi için animasyon */
         .emoji-layer {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             overflow: hidden;
             pointer-events: none;
-            opacity: 0.15;
+            opacity: 0.2;
         }
 
         .emoji-layer span {
             position: absolute;
             filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));
-            animation: float-random 8s infinite linear alternate;
+            animation: move-around 15s infinite linear;
         }
 
-        @keyframes float-random {
-            from { transform: translate(0, 0) rotate(0deg); }
-            to { transform: translate(30px, 30px) rotate(20deg); }
+        @keyframes move-around {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, 50px) rotate(90deg); }
+            50% { transform: translate(50px, 150px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
         }
 
         /* ÜST YAZI VE UNVAN */
@@ -72,11 +75,9 @@
             font-size: 0.9rem;
             line-height: 1.5;
         }
-
         .rules-box h3 { margin: 0 0 10px 0; color: #ffcc00; text-align: center; }
-        .rules-box b { color: #ff4757; }
 
-        /* VİDEO TAM EKRAN MODU (Butonları kapatmak için z-index yüksek) */
+        /* VİDEO TAM EKRAN MODU */
         .full-screen-anim {
             position: fixed !important;
             top: 0 !important;
@@ -88,7 +89,6 @@
             background: black;
         }
 
-        /* TASARIMLAR */
         .counter-box { font-size: 2.5rem; color: #ffcc00; margin-bottom: 10px; }
         
         .main-display {
@@ -107,7 +107,6 @@
             cursor: pointer; font-weight: 900; margin-top: 20px;
             box-shadow: 0 8px 0 #b33939; transition: 0.1s;
         }
-        
         .tokat-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #b33939; }
 
         .health-container { width: 300px; height: 15px; background: #333; border-radius: 10px; margin-bottom: 15px; overflow: hidden; border: 2px solid #fff; }
@@ -116,17 +115,14 @@
         .grid-container { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin-top: 25px; }
         .num-btn { width: 45px; height: 45px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; }
 
-        .shake-active { animation: shake 0.2s infinite; }
-        @keyframes shake {
-            0% { transform: scale(1.05) rotate(1deg); }
-            50% { transform: scale(1) rotate(-1deg); }
-            100% { transform: scale(1.05) rotate(1deg); }
+        /* Müzik Butonu (Opsiyonel Kontrol) */
+        #music-control {
+            position: fixed; top: 10px; right: 10px; background: #333; color: white; border: 1px solid white; padding: 5px; cursor: pointer; border-radius: 5px; z-index: 100;
         }
 
         @media (max-width: 600px) {
             .top-title { font-size: 1.8rem; }
             .grid-container { grid-template-columns: repeat(5, 1fr); }
-            .rules-box { font-size: 0.75rem; padding: 10px; }
         }
     </style>
 </head>
@@ -134,16 +130,20 @@
 
     <div class="emoji-layer" id="emojiLayer"></div>
 
+    <audio id="bg-music" loop>
+        <source src="https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptitle=Eye+of+the+Tiger&filename=mt/MTY4NDcyNDExNjgzOTkx_3H_2fV8e8vH_2bo.mp3" type="audio/mpeg">
+    </audio>
+    <button id="music-control" onclick="toggleMusic()">🎵 Müziği Başlat</button>
+
     <h1 class="top-title">DAYAK ARSIZI FURKAN</h1>
     <div id="unvan-etiketi">Unvan: Acemi Tokatçı</div>
 
     <div class="rules-box">
         <h3>📋 OYUN KURALLARI</h3>
-        1. <b>Tokatla:</b> Butona her bastığında Furkan <b>tam ekran</b> darbe alır ve canı %10 azalır.<br>
-        2. <b>Can Sistemi:</b> Canı sıfırlanan Furkan 3 saniyeliğine bayılır (Tokat atamazsın).<br>
-        3. <b>Unvanlar:</b> Attığın tokat sayısına göre "Zalim", "Usta" ve "Efsane" unvanlarını kazanırsın.<br>
-        4. <b>Sorgu:</b> Furkan bazen durur ve suçluyu arar. Doğru tahmin ederse yakalanırsın!<br>
-        5. <b>Medya:</b> Alttaki 30 buton Furkan'ın gizli arşivindeki ses ve videoları açar.
+        1. <b>Tokatla:</b> Furkan <b>tam ekran</b> darbe alır ve canı %10 azalır.<br>
+        2. <b>Müzik:</b> "Eye of the Tiger" çalarken motivasyonu artır!<br>
+        3. <b>Unvanlar:</b> Tokat sayına göre Zalim, Usta ve Efsane ol.<br>
+        4. <b>Butonlar:</b> Alttaki 1-30 butonları özel arşivdir.
     </div>
 
     <div class="counter-box">TOPLAM TOKAT: <span id="counter">0</span></div>
@@ -167,6 +167,7 @@
         const vdo = document.getElementById('main-video');
         const tSes = document.getElementById('tokat-ses');
         const gAudio = document.getElementById('general-audio');
+        const bgMusic = document.getElementById('bg-music');
         const counterText = document.getElementById('counter');
         const healthBar = document.getElementById('health-bar');
         const unvanEtiketi = document.getElementById('unvan-etiketi');
@@ -178,14 +179,26 @@
         counterText.innerText = count;
         updateUnvan();
 
-        // EMOJİLER
+        // Müzik Başlatma (Tarayıcı kısıtlamaları nedeniyle ilk etkileşimde çalışır)
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                document.getElementById('music-control').innerText = "🔇 Müziği Durdur";
+            } else {
+                bgMusic.pause();
+                document.getElementById('music-control').innerText = "🎵 Müziği Başlat";
+            }
+        }
+
+        // HAREKETLİ EMOJİLER
         const emojis = ['👊', '✋', '💥', '🥊', '💢'];
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 25; i++) {
             const span = document.createElement('span');
             span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-            span.style.left = Math.random() * 100 + "vw";
-            span.style.top = Math.random() * 100 + "vh";
-            span.style.fontSize = "3rem";
+            span.style.left = Math.random() * 90 + "vw";
+            span.style.top = Math.random() * 90 + "vh";
+            span.style.fontSize = (Math.random() * 2 + 2) + "rem";
+            span.style.animationDuration = (Math.random() * 10 + 10) + "s";
             emojiLayer.appendChild(span);
         }
 
@@ -198,6 +211,8 @@
 
         function tokatla() {
             if (health <= 0) return;
+            // İlk tokatta müziği otomatik başlatmayı dene
+            if(bgMusic.paused && count === 0) bgMusic.play().catch(()=>{});
 
             count++;
             counterText.innerText = count;
@@ -207,7 +222,6 @@
             health -= 10;
             healthBar.style.width = health + "%";
 
-            // VİDEO TAM EKRAN (Butonları kapatır)
             vdo.src = "TOKAT.mp4";
             vdo.style.display = 'block';
             vdo.classList.add('full-screen-anim');
@@ -222,7 +236,6 @@
                 if (health <= 0) furkanBayildi();
             };
 
-            // Kızarma
             img.style.filter = `sepia(0.5) saturate(${2 + count/100}) hue-rotate(-${Math.min(count/5, 80)}deg)`;
         }
 
@@ -239,7 +252,6 @@
             }, 3000);
         }
 
-        // 1-30 Butonlar
         const grid = document.getElementById('grid');
         for (let i = 1; i <= 30; i++) {
             const b = document.createElement('button');
