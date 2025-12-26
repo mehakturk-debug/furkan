@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Furkan Tokatla - FULL SCREEN EMOJI MOD</title>
+    <title>Dayak Arsızı Furkan - ULTIMATE KAOS</title>
     <style>
-        /* --- ARKA PLAN VE EMOJİLER --- */
+        /* --- ARKA PLAN VE KARIŞIK EMOJİLER --- */
         body {
             font-family: 'Arial Black', sans-serif;
             background-color: #050505;
@@ -17,32 +17,41 @@
             margin: 0;
             overflow-x: hidden;
             position: relative;
+            min-height: 100vh;
         }
 
-        /* Emojilerin görünür olması için güncellendi */
-        .emoji-bg {
+        /* Karışık emoji katmanı */
+        .emoji-layer {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-items: center;
-            font-size: 5rem;
-            opacity: 0.15; /* Görünürlük artırıldı */
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); /* Siyah üzerinde parlama */
-            user-select: none;
+            overflow: hidden;
             pointer-events: none;
-            animation: move-bg 30s linear infinite;
+            opacity: 0.2;
         }
 
-        @keyframes move-bg {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0); }
+        .emoji-layer span {
+            position: absolute;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));
+            animation: float-random 10s infinite linear alternate;
         }
 
-        /* --- VİDEO TAM EKRAN ANİMASYONU --- */
+        @keyframes float-random {
+            from { transform: translate(0, 0) rotate(0deg); }
+            to { transform: translate(20px, 20px) rotate(10deg); }
+        }
+
+        /* ÜST YAZI */
+        .top-title {
+            font-size: 4rem;
+            color: #ff4757;
+            text-transform: uppercase;
+            text-shadow: 4px 4px 0px #fff, 0 0 20px rgba(255, 71, 87, 0.6);
+            margin: 10px 0 20px 0;
+            text-align: center;
+        }
+
+        /* VİDEO TAM EKRAN ANİMASYONU */
         .full-screen-anim {
             position: fixed !important;
             top: 0 !important;
@@ -50,87 +59,86 @@
             width: 100vw !important;
             height: 100vh !important;
             z-index: 9999 !important;
-            border: none !important;
-            border-radius: 0 !important;
             object-fit: contain !important;
             background: black;
         }
 
-        /* --- DİĞER TASARIMLAR --- */
+        /* DİĞER TASARIMLAR */
         .game-rules {
-            background: rgba(40, 40, 40, 0.8);
-            border: 2px solid #ffcc00;
-            padding: 15px;
+            background: rgba(30, 30, 30, 0.9);
+            border: 2px dashed #ffcc00;
+            padding: 10px 20px;
             border-radius: 15px;
             margin-bottom: 20px;
             max-width: 600px;
-            font-size: 0.9rem;
-            z-index: 10;
+            font-size: 0.85rem;
+            text-align: center;
         }
 
-        .counter-box { font-size: 2.5rem; color: #ffcc00; z-index: 10; }
+        .counter-box { font-size: 3rem; color: #ffcc00; margin-bottom: 10px; }
         
         .main-display {
             position: relative;
-            width: 350px; height: 350px;
+            width: 320px; height: 320px;
             background: #000; border-radius: 20px;
             overflow: hidden; border: 8px solid #ff4757;
-            z-index: 10;
+            box-shadow: 0 0 30px rgba(255, 71, 87, 0.4);
         }
 
         #furkan-img, #main-video { width: 100%; height: 100%; object-fit: cover; position: absolute; }
         #main-video { display: none; }
 
         .tokat-btn {
-            padding: 20px 60px; font-size: 2.5rem; background: #ff4757;
+            padding: 15px 50px; font-size: 2.2rem; background: #ff4757;
             color: white; border: 4px solid white; border-radius: 100px;
             cursor: pointer; font-weight: 900; margin-top: 20px;
-            z-index: 10; box-shadow: 0 10px 0 #b33939;
+            box-shadow: 0 8px 0 #b33939; transition: 0.1s;
         }
         
-        .tokat-btn:active { transform: translateY(5px); box-shadow: 0 5px 0 #b33939; }
+        .tokat-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #b33939; }
         .gold-tokat { background: #ffd700 !important; color: #000 !important; box-shadow: 0 0 30px #ffd700 !important; }
 
-        .health-container { width: 350px; height: 20px; background: #333; border-radius: 10px; margin: 10px; overflow: hidden; border: 2px solid #fff; }
-        #health-bar { width: 100%; height: 100%; background: #ff4757; transition: 0.2s; }
+        .health-container { width: 320px; height: 20px; background: #333; border-radius: 10px; margin-bottom: 15px; overflow: hidden; border: 2px solid #fff; }
+        #health-bar { width: 100%; height: 100%; background: linear-gradient(90deg, #ff4757, #ff6b81); transition: 0.2s; }
 
-        .grid-container { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin-top: 20px; z-index: 10; }
-        .num-btn { width: 45px; height: 45px; border: none; border-radius: 5px; color: white; cursor: pointer; }
+        .grid-container { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin-top: 25px; }
+        .num-btn { width: 45px; height: 45px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; }
 
         #achievement-box { position: fixed; bottom: 20px; right: 20px; background: #ffcc00; color: #000; padding: 15px; border-radius: 10px; display: none; z-index: 10000; font-weight: bold; }
         
         .shake-active { animation: shake 0.2s infinite; }
         @keyframes shake {
-            0% { transform: translate(1px, 1px); }
-            50% { transform: translate(-2px, 2px); }
-            100% { transform: translate(1px, -1px); }
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(2deg) scale(1.02); }
+            100% { transform: rotate(-2deg); }
+        }
+
+        @media (max-width: 600px) {
+            .top-title { font-size: 2rem; }
+            .grid-container { grid-template-columns: repeat(5, 1fr); }
         }
     </style>
 </head>
 <body id="body-main">
 
-    <div class="emoji-bg">
-        👊 ✋ 💥 👊 ✋ 💥 👊 ✋ 💥 👊 ✋ 💥 👊 ✋ 💥 👊 ✋ 💥
-    </div>
+    <div class="emoji-layer" id="emojiLayer"></div>
 
-    <div id="achievement-box">🏆 BAŞARIM!</div>
+    <h1 class="top-title">DAYAK ARSIZI FURKAN</h1>
 
     <div class="game-rules">
-        <b>KURALLAR:</b> Tokatla butonuna basınca Furkan <b>tam ekran</b> sarsılır! Canı bitince bayılır. 
-        Sorgu panelinde Furkan'ın tahminini doğru bilirsen yakalanırsın!
+        <b>DİKKAT:</b> Tokatla butonuna basınca <b>TAM EKRAN</b> darbe başlar! <br>
+        Furkan kızarır, bayılır ve intikam alır. 1-30 butonlarını keşfet!
     </div>
+
+    <div id="achievement-box">🏆 BAŞARIM KAZANILDI!</div>
 
     <div class="counter-box">TOKAT: <span id="counter">0</span></div>
     
     <div class="health-container"><div id="health-bar"></div></div>
 
-    <div class="stage-container" id="stage" style="display: flex; align-items: center; gap: 20px;">
-        <h2 style="writing-mode: vertical-rl; color: #ff4757;">DAYAK ARSIZI</h2>
-        <div class="main-display" id="video-wrapper">
-            <img src="FURKAN.jpeg" id="furkan-img">
-            <video id="main-video" playsinline></video>
-        </div>
-        <h2 style="writing-mode: vertical-rl; color: #ff4757;">FURKAN</h2>
+    <div class="main-display" id="video-wrapper">
+        <img src="FURKAN.jpeg" id="furkan-img">
+        <video id="main-video" playsinline></video>
     </div>
 
     <button id="main-tokat-btn" class="tokat-btn" onclick="tokatla()">✋ TOKATLA ✋</button>
@@ -149,11 +157,23 @@
         const healthBar = document.getElementById('health-bar');
         const body = document.getElementById('body-main');
         const mainBtn = document.getElementById('main-tokat-btn');
-        const videoWrapper = document.getElementById('video-wrapper');
+        const emojiLayer = document.getElementById('emojiLayer');
 
         let count = parseInt(localStorage.getItem('tokatSayisi')) || 0;
         let health = 100;
         counterText.innerText = count;
+
+        // EMOJİLERİ KARIŞIK DAĞITMA
+        const emojis = ['👊', '✋', '💥', '🥊', '💢', '😭'];
+        for (let i = 0; i < 40; i++) {
+            const span = document.createElement('span');
+            span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            span.style.left = Math.random() * 100 + "vw";
+            span.style.top = Math.random() * 100 + "vh";
+            span.style.fontSize = (Math.random() * 3 + 2) + "rem";
+            span.style.animationDelay = Math.random() * 5 + "s";
+            emojiLayer.appendChild(span);
+        }
 
         function tokatla() {
             if (health <= 0) return;
@@ -165,31 +185,30 @@
             health -= 10;
             healthBar.style.width = health + "%";
 
-            // VİDEOYU OYNAT VE TAM EKRAN YAP
+            // TAM EKRAN VİDEO
             vdo.src = "TOKAT.mp4";
             vdo.style.display = 'block';
-            vdo.classList.add('full-screen-anim'); // Tam ekran sınıfını ekle
+            vdo.classList.add('full-screen-anim');
             vdo.play().catch(() => {});
             
             tSes.currentTime = 0;
             tSes.play().catch(() => {});
 
-            // Sarsıntı efekti
             body.classList.add('shake-active');
             
             vdo.onended = () => {
-                vdo.classList.remove('full-screen-anim'); // Bitince normale dön
+                vdo.classList.remove('full-screen-anim');
                 vdo.style.display = 'none';
                 body.classList.remove('shake-active');
                 if (health <= 0) furkanBayildi();
             };
 
-            // Kızarma efekti
-            img.style.filter = `sepia(0.5) saturate(${2 + count/100}) hue-rotate(-${Math.min(count/5, 60)}deg)`;
+            // Kızarma
+            img.style.filter = `sepia(0.5) saturate(${2 + count/100}) hue-rotate(-${Math.min(count/5, 70)}deg)`;
         }
 
         function furkanBayildi() {
-            img.style.filter = "grayscale(1) brightness(0.5)";
+            img.style.filter = "grayscale(1) brightness(0.3)";
             mainBtn.innerText = "DİRİLİYOR...";
             mainBtn.disabled = true;
             setTimeout(() => {
@@ -201,13 +220,13 @@
             }, 3000);
         }
 
-        // 30 Buton
+        // 1-30 Butonlar
         const grid = document.getElementById('grid');
         for (let i = 1; i <= 30; i++) {
             const b = document.createElement('button');
             b.className = 'num-btn';
             b.innerText = i;
-            b.style.backgroundColor = `hsl(${i * 137}, 60%, 40%)`;
+            b.style.backgroundColor = `hsl(${i * 137}, 65%, 45%)`;
             b.onclick = () => {
                 gAudio.src = i + ".mp3";
                 gAudio.play().catch(() => {
