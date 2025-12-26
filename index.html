@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dayak Arsızı Furkan - KUSURSUZ v15</title>
+    <title>Dayak Arsızı Furkan - v16</title>
     <style>
         /* --- GENEL TASARIM --- */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: #050505;
             color: white;
             display: flex;
@@ -16,126 +16,105 @@
             padding: 20px;
             margin: 0;
             overflow-x: hidden;
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-1/sym46.cur'), auto;
         }
 
-        /* HAREKETLİ EMOJİLER */
+        /* EMOJİ ARKA PLANI */
         .emoji-layer {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.2;
+            opacity: 0.15;
         }
         .emoji-layer span {
             position: absolute;
             animation: move-around 15s infinite linear;
-            filter: drop-shadow(0 0 5px white);
         }
         @keyframes move-around {
             0% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(50px, 100px) rotate(180deg); }
+            50% { transform: translate(30px, 60px) rotate(180deg); }
             100% { transform: translate(0, 0) rotate(360deg); }
         }
 
-        /* BAŞLIK VE STATUS */
-        .top-title { font-size: 2.5rem; color: #ff4757; text-shadow: 2px 2px white; margin: 10px 0; text-align: center; }
-        #furkan-status { color: #00ffcc; background: #222; padding: 8px 15px; border-radius: 20px; margin-bottom: 10px; font-weight: bold; border: 1px solid #00ffcc; }
-        #unvan-etiketi { background: #ffcc00; color: black; padding: 5px 20px; border-radius: 50px; font-weight: 900; margin-bottom: 15px; }
+        .top-title { font-size: 2.2rem; color: #ff4757; text-shadow: 2px 2px white; margin: 10px 0; }
+        #furkan-status { color: #00ffcc; background: #1a1a1a; padding: 5px 15px; border-radius: 15px; border: 1px solid #00ffcc; margin-bottom: 10px; }
+        #unvan-etiketi { background: #ffcc00; color: black; padding: 4px 15px; border-radius: 50px; font-weight: bold; margin-bottom: 15px; }
 
-        /* YENİ VE AÇIKLAYICI KURALLAR */
-        .pro-rules {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid #ff4757;
-            padding: 15px;
-            border-radius: 15px;
-            max-width: 500px;
+        /* KURALLAR */
+        .rules-container {
+            background: rgba(255,255,255,0.05);
+            border-left: 5px solid #ff4757;
+            padding: 10px 20px;
             margin-bottom: 20px;
-            line-height: 1.6;
+            font-size: 0.9rem;
+            max-width: 450px;
         }
-        .pro-rules h3 { margin: 0 0 10px 0; color: #ffcc00; text-align: center; text-decoration: underline; }
-        .pro-rules ul { padding-left: 20px; margin: 0; }
-        .pro-rules li { margin-bottom: 5px; font-size: 0.9rem; }
 
-        /* OYUN ALANI */
+        /* OYUN ALANI - Video artık dışarı taşmaz */
         .main-display {
             position: relative;
             width: 300px; height: 300px;
-            background: #000; border-radius: 25px;
-            overflow: hidden; border: 8px solid #ff4757;
-            perspective: 1000px;
+            background: #000; border-radius: 20px;
+            overflow: hidden; border: 6px solid #ff4757;
+            box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
         }
-        #furkan-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.1s; }
+        #furkan-img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+        
+        /* Video artık tam ekran değil, kutu içinde kalıyor */
         #main-video { 
             display: none; 
-            width: 100%; height: 100%; 
+            width: 100%; 
+            height: 100%; 
             object-fit: cover; 
             position: absolute; 
             top: 0; left: 0; 
-            z-index: 100;
+            z-index: 10;
         }
 
-        /* TAM EKRAN MODU */
-        .full-screen-anim {
-            position: fixed !important;
-            top: 0 !important; left: 0 !important;
-            width: 100vw !important; height: 100vh !important;
-            z-index: 999999 !important;
-            object-fit: contain !important;
-            background: black;
-        }
-
-        /* BUTONLAR VE BARLAR */
-        .health-container { width: 300px; height: 12px; background: #333; border-radius: 10px; margin: 10px 0; overflow: hidden; border: 1px solid white; }
-        #health-bar { width: 100%; height: 100%; background: #ff4757; transition: 0.3s; }
+        .health-container { width: 300px; height: 10px; background: #333; border-radius: 5px; margin: 15px 0; overflow: hidden; }
+        #health-bar { width: 100%; height: 100%; background: #ff4757; transition: 0.2s; }
 
         .tokat-btn {
-            padding: 15px 60px; font-size: 2rem; background: #ff4757;
-            color: white; border: 4px solid white; border-radius: 100px;
-            cursor: pointer; font-weight: 900; box-shadow: 0 8px 0 #b33939;
+            padding: 12px 50px; font-size: 1.8rem; background: #ff4757;
+            color: white; border: 3px solid white; border-radius: 50px;
+            cursor: pointer; font-weight: 900; box-shadow: 0 5px 0 #b33939;
         }
-        .tokat-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #b33939; }
+        .tokat-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #b33939; }
 
-        /* MEDYA BUTONLARI ARASI AÇIK */
+        /* BUTONLAR ARASI MESAFE */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 15px;
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 25px;
+            padding-bottom: 40px;
         }
-        .num-btn { width: 55px; height: 55px; border: none; border-radius: 12px; color: white; cursor: pointer; font-weight: bold; font-size: 1.1rem; }
+        .num-btn { width: 50px; height: 50px; border: none; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; }
 
-        #music-btn { position: fixed; top: 10px; right: 10px; z-index: 1000; padding: 10px; background: #222; color: white; border: 1px solid #ffcc00; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
-<body>
+<body onclick="startAll()"> <div class="emoji-layer" id="emojiLayer"></div>
 
-    <div class="emoji-layer" id="emojiLayer"></div>
-    <button id="music-btn" onclick="toggleMusic()">🎵 Müzik Başlat</button>
+    <h1 class="top-title">FURKAN TOKATLAMA v16</h1>
+    <div id="unvan-etiketi">Unvan: Başlangıç</div>
+    <div id="furkan-status">Furkan: Tıkla ve Müziği Başlat!</div>
 
-    <h1 class="top-title">DAYAK ARSIZI FURKAN</h1>
-    <div id="unvan-etiketi">Unvan: Çaylak Tokatçı</div>
-    <div id="furkan-status">Furkan: Henüz darbe almadım!</div>
-
-    <div class="pro-rules">
-        <h3>📖 NASIL OYNANIR?</h3>
-        <ul>
-            <li><b>TOKATLA:</b> Butona bastığın an Furkan tam ekran sarsılır ve <b>"Eye of the Tiger"</b> müziği otomatik başlar.</li>
-            <li><b>SAĞLIK:</b> Her tokat Furkan'ın canını %10 düşürür. Can bitince 3 saniye dinlenir.</li>
-            <li><b>GÖZ TAKİBİ:</b> Furkan'ın gözleri fare imlecini takip eder, kaçamazsın!</li>
-            <li><b>ARŞİV:</b> Alttaki renkli butonlar Furkan'ın gizli ses ve videolarını tetikler.</li>
-        </ul>
+    <div class="rules-container">
+        <b>SİSTEM NOTLARI:</b><br>
+        1. Sayfada herhangi bir yere tıkladığın an <b>Eye of the Tiger</b> başlar.<br>
+        2. Tokat videoları artık Furkan'ın çerçevesi içinde oynar, ekranı kaplamaz.<br>
+        3. Skorun ve unvanın tokatladıkça artmaya devam eder.
     </div>
 
-    <div style="font-size: 1.8rem; color: #ffcc00; margin-bottom: 10px;">TOKAT SKORU: <span id="counter">0</span></div>
+    <div style="font-size: 1.5rem; color: #ffcc00;">TOPLAM TOKAT: <span id="counter">0</span></div>
     <div class="health-container"><div id="health-bar"></div></div>
 
     <div class="main-display">
         <img src="FURKAN.jpeg" id="furkan-img">
-        <video id="main-video" playsinline preload="auto"></video>
-    </div>
+        <video id="main-video" playsinline muted></video> </div>
 
-    <button id="main-tokat-btn" class="tokat-btn" onclick="tokatla()">✋ TOKATLA ✋</button>
+    <button id="main-tokat-btn" class="tokat-btn" onclick="tokatla()">✋ TOKATLA</button>
 
     <div class="grid-container" id="grid"></div>
 
@@ -152,36 +131,27 @@
         const counterText = document.getElementById('counter');
         const healthBar = document.getElementById('health-bar');
         const statusText = document.getElementById('furkan-status');
-        const unvanText = document.getElementById('unvan-etiketi');
 
         let count = parseInt(localStorage.getItem('tokatSayisi')) || 0;
         let health = 100;
-        let isFirst = true;
+        let started = false;
 
         counterText.innerText = count;
-        updateUnvan();
 
-        function toggleMusic() {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                document.getElementById('music-btn').innerText = "🔊 Müzik Çalıyor";
-            } else {
-                bgMusic.pause();
-                document.getElementById('music-btn').innerText = "🎵 Müzik Durdu";
+        // Sayfaya ilk girişte (tıklamada) müziği başlatır
+        function startAll() {
+            if (!started) {
+                bgMusic.play().catch(() => {});
+                statusText.innerText = "Furkan: Müzik başladı, hadi vur!";
+                started = true;
             }
         }
 
-        function updateUnvan() {
-            if (count < 50) unvanText.innerText = "Unvan: Çaylak Tokatçı";
-            else if (count < 200) unvanText.innerText = "Unvan: Zalim Tokatçı";
-            else unvanText.innerText = "Unvan: EFSANE TOKAT ÜSTADI";
-        }
-
-        // GÖZ TAKİBİ
+        // Göz Takibi
         document.addEventListener('mousemove', (e) => {
             if (vdo.style.display !== 'block') {
-                const x = (window.innerWidth / 2 - e.pageX) / 20;
-                const y = (window.innerHeight / 2 - e.pageY) / 20;
+                const x = (window.innerWidth / 2 - e.pageX) / 25;
+                const y = (window.innerHeight / 2 - e.pageY) / 25;
                 img.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
             }
         });
@@ -189,68 +159,50 @@
         function tokatla() {
             if (health <= 0) return;
 
-            // Otomatik Müzik ve Ses Başlatma (İlk etkileşimle kilit açılır)
-            if(isFirst) {
-                bgMusic.play().catch(e => console.log("Müzik için etkileşim bekleniyor"));
-                isFirst = false;
-            }
-
             count++;
             health -= 10;
             counterText.innerText = count;
             healthBar.style.width = health + "%";
             localStorage.setItem('tokatSayisi', count);
-            updateUnvan();
 
             // Tokat Sesi
             tSes.currentTime = 0;
             tSes.play();
 
-            // VİDEO OYNATMA VE TAM EKRAN (Hata düzeltildi)
+            // Video Kutusu (Büyümeden açılır)
             vdo.src = "TOKAT.mp4";
+            vdo.muted = false; 
             vdo.style.display = "block";
-            vdo.classList.add('full-screen-anim');
-            
-            let playPromise = vdo.play();
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    // Video başarıyla başladı
-                }).catch(error => {
-                    vdo.style.display = "none"; // Hata olursa gizle
-                });
-            }
+            vdo.play();
 
             vdo.onended = () => {
-                vdo.classList.remove('full-screen-anim');
                 vdo.style.display = "none";
                 if (health <= 0) furkanBayildi();
             };
 
-            img.style.filter = `sepia(0.5) saturate(${2 + count/100}) hue-rotate(-${Math.min(count/5, 80)}deg)`;
-            statusText.innerText = "Furkan: AHH! BU ACIDI!";
+            img.style.filter = `sepia(0.4) saturate(2) hue-rotate(-${Math.min(count/2, 50)}deg)`;
         }
 
         function furkanBayildi() {
-            statusText.innerText = "Furkan: NAKAVT OLDU...";
-            img.style.filter = "grayscale(1) blur(3px)";
-            document.getElementById('main-tokat-btn').disabled = true;
+            statusText.innerText = "Furkan: NAKAVT!";
+            img.style.filter = "grayscale(1)";
             setTimeout(() => {
                 health = 100;
                 healthBar.style.width = "100%";
                 img.style.filter = "none";
-                document.getElementById('main-tokat-btn').disabled = false;
-                statusText.innerText = "Furkan: Kalktım, yine gel!";
-            }, 3000);
+                statusText.innerText = "Furkan: Devam ediyoruz!";
+            }, 2500);
         }
 
-        // GRID BUTONLARI (Arası açıldı)
+        // GRID BUTONLARI
         const grid = document.getElementById('grid');
         for (let i = 1; i <= 30; i++) {
             const b = document.createElement('button');
             b.className = 'num-btn';
             b.innerText = i;
-            b.style.backgroundColor = `hsl(${i * 45}, 70%, 50%)`;
-            b.onclick = () => {
+            b.style.backgroundColor = `hsl(${i * 50}, 60%, 45%)`;
+            b.onclick = (e) => {
+                e.stopPropagation(); // Butona basınca sayfa tıklama fonksiyonu karışmasın
                 gAudio.src = i + ".mp3";
                 gAudio.play().catch(() => {
                     vdo.src = i + ".mp4";
@@ -262,14 +214,13 @@
         }
 
         // EMOJİLER
-        const emojis = ['👊', '✋', '💥', '🥊', '💢'];
         const layer = document.getElementById('emojiLayer');
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 15; i++) {
             const span = document.createElement('span');
-            span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            span.innerText = '👊';
             span.style.left = Math.random() * 90 + "vw";
             span.style.top = Math.random() * 90 + "vh";
-            span.style.fontSize = "2.5rem";
+            span.style.fontSize = "2rem";
             span.style.animationDuration = (Math.random() * 5 + 10) + "s";
             layer.appendChild(span);
         }
