@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Furkan Tokatla - OYUN MODU</title>
+    <title>Furkan Tokatla - FULL SCREEN EMOJI MOD</title>
     <style>
-        /* --- YENİ OYUN KURALLARI VE ARKA PLAN TASARIMI --- */
+        /* --- ARKA PLAN VE EMOJİLER --- */
         body {
             font-family: 'Arial Black', sans-serif;
-            background-color: #0a0a0a;
+            background-color: #050505;
             color: white;
             display: flex;
             flex-direction: column;
@@ -16,210 +16,121 @@
             padding: 20px;
             margin: 0;
             overflow-x: hidden;
-            transition: background 0.5s, filter 0.1s;
-        }
-
-        /* Arka plan emojileri - Komik ve agresif */
-        body::before {
-            content: "🥊 💥 👊 ✋ 💢"; /* Daha fazla ve uygun emoji */
-            position: fixed;
-            font-size: 10rem; /* Boyutunu biraz küçülttüm, daha az boğucu */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            flex-wrap: wrap; /* Emojilerin sığması için */
-            opacity: 0.05; /* Biraz daha belirgin */
-            z-index: -1;
-            animation: background-move 60s linear infinite; /* Yavaşça hareket etsinler */
-        }
-        @keyframes background-move {
-            from { transform: rotate(0deg) translateX(0); }
-            to { transform: rotate(360deg) translateX(100px); } /* Dönsün ve hafifçe kaysın */
-        }
-
-        /* --- OYUN KURALLARI KUTUSU --- */
-        .game-rules {
-            background: rgba(255, 255, 255, 0.08);
-            border: 2px solid #ffcc00; /* Altın sarısı çerçeve */
-            padding: 15px 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            max-width: 700px;
-            text-align: left;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-        }
-        .game-rules h3 { color: #ffcc00; text-align: center; margin-bottom: 15px; }
-        .game-rules ul { list-style: none; padding: 0; margin: 0; }
-        .game-rules li { margin-bottom: 8px; font-size: 0.95rem; border-bottom: 1px dotted rgba(255,255,255,0.2); padding-bottom: 4px; }
-        .game-rules b { color: #ff4757; } /* Kırmızı vurgu */
-        .game-rules li:last-child { border-bottom: none; }
-
-
-        /* --- DİĞER CSS TANIMLAMALARI (Öncekiyle aynı) --- */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
-        @keyframes combo-bg {
-            0% { background-color: #ff0000; }
-            50% { background-color: #00ff00; }
-            100% { background-color: #0000ff; }
-        }
-        .shake-active { animation: shake 0.2s infinite; }
-        .combo-active { animation: combo-bg 0.1s infinite !important; }
-        .flash-effect { filter: brightness(2.5) contrast(1.5); }
-
-        button { touch-action: manipulation; } /* Mobil hızlandırma */
-
-        /* CAN BARI */
-        .health-container {
-            width: 350px;
-            height: 25px;
-            background: #444;
-            border: 3px solid #fff;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
-        }
-        #health-bar {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, #ff4757, #ff6b81);
-            transition: width 0.2s;
-        }
-
-        .counter-box { font-size: 2.5rem; color: #ffcc00; margin: 5px 0; text-shadow: 2px 2px #000; }
-        #unvan { font-size: 1.1rem; color: #00ffcc; margin-bottom: 10px; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; }
-
-        .stage-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
             position: relative;
         }
 
-        .side-text {
-            font-size: 3.5rem; color: #ff4757; writing-mode: vertical-rl;
-            text-transform: uppercase; text-shadow: 3px 3px 0px #fff;
-            background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px;
+        /* Emojilerin görünür olması için güncellendi */
+        .emoji-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 5rem;
+            opacity: 0.15; /* Görünürlük artırıldı */
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); /* Siyah üzerinde parlama */
+            user-select: none;
+            pointer-events: none;
+            animation: move-bg 30s linear infinite;
         }
 
+        @keyframes move-bg {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* --- VİDEO TAM EKRAN ANİMASYONU --- */
+        .full-screen-anim {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            border: none !important;
+            border-radius: 0 !important;
+            object-fit: contain !important;
+            background: black;
+        }
+
+        /* --- DİĞER TASARIMLAR --- */
+        .game-rules {
+            background: rgba(40, 40, 40, 0.8);
+            border: 2px solid #ffcc00;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            max-width: 600px;
+            font-size: 0.9rem;
+            z-index: 10;
+        }
+
+        .counter-box { font-size: 2.5rem; color: #ffcc00; z-index: 10; }
+        
         .main-display {
             position: relative;
             width: 350px; height: 350px;
             background: #000; border-radius: 20px;
             overflow: hidden; border: 8px solid #ff4757;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            z-index: 10;
         }
 
         #furkan-img, #main-video { width: 100%; height: 100%; object-fit: cover; position: absolute; }
-        #main-video { display: none; z-index: 2; }
-
-        #crack-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://i.imgur.com/7S8T6Vp.png'); 
-            background-size: cover; z-index: 999; display: none; pointer-events: none;
-        }
-
-        .balon {
-            position: absolute; background: white; color: black; padding: 10px;
-            border-radius: 15px; font-weight: bold; z-index: 100;
-            box-shadow: 3px 3px 0px #000;
-        }
-
-        #suspect-panel {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); display: none;
-            flex-direction: column; justify-content: center; align-items: center; z-index: 300;
-        }
-        .suspect-btn {
-            background: #ff4757;
-            color: white;
-            border: 2px solid #fff;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+        #main-video { display: none; }
 
         .tokat-btn {
             padding: 20px 60px; font-size: 2.5rem; background: #ff4757;
             color: white; border: 4px solid white; border-radius: 100px;
-            cursor: pointer; font-weight: 900; transition: 0.1s;
-            box-shadow: 0 10px 0px #b33939;
+            cursor: pointer; font-weight: 900; margin-top: 20px;
+            z-index: 10; box-shadow: 0 10px 0 #b33939;
         }
-        .tokat-btn:active { transform: translateY(5px); box-shadow: 0 5px 0px #b33939; }
-        .gold-tokat { background: #ffd700 !important; color: #000 !important; border-color: #000 !important; box-shadow: 0 0 30px #ffd700 !important; }
+        
+        .tokat-btn:active { transform: translateY(5px); box-shadow: 0 5px 0 #b33939; }
+        .gold-tokat { background: #ffd700 !important; color: #000 !important; box-shadow: 0 0 30px #ffd700 !important; }
 
-        .grid-container { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; margin-top: 30px; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 20px; }
-        .num-btn { width: 50px; height: 50px; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; }
+        .health-container { width: 350px; height: 20px; background: #333; border-radius: 10px; margin: 10px; overflow: hidden; border: 2px solid #fff; }
+        #health-bar { width: 100%; height: 100%; background: #ff4757; transition: 0.2s; }
 
-        #achievement-box {
-            position: fixed; bottom: 20px; right: 20px; background: #ffcc00;
-            color: #000; padding: 15px; border-radius: 10px; display: none;
-            font-weight: bold; box-shadow: 0 0 15px rgba(0,0,0,0.5); z-index: 1000;
-        }
+        .grid-container { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin-top: 20px; z-index: 10; }
+        .num-btn { width: 45px; height: 45px; border: none; border-radius: 5px; color: white; cursor: pointer; }
 
-        /* Responsive ayarlar */
-        @media (max-width: 800px) {
-            .side-text { font-size: 1.5rem; }
-            .main-display { width: 280px; height: 280px; }
-            .grid-container { grid-template-columns: repeat(5, 1fr); }
-            .tokat-btn { padding: 15px 40px; font-size: 2rem; }
-            .game-rules { max-width: 90%; font-size: 0.8rem; }
-            body::before { font-size: 5rem; } /* Emojileri küçült */
+        #achievement-box { position: fixed; bottom: 20px; right: 20px; background: #ffcc00; color: #000; padding: 15px; border-radius: 10px; display: none; z-index: 10000; font-weight: bold; }
+        
+        .shake-active { animation: shake 0.2s infinite; }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px); }
+            50% { transform: translate(-2px, 2px); }
+            100% { transform: translate(1px, -1px); }
         }
     </style>
 </head>
 <body id="body-main">
 
-    <div id="crack-screen"></div>
-    <div id="achievement-box">🏆 BAŞARIM AÇILDI!</div>
+    <div class="emoji-bg">
+        👊 ✋ 💥 👊 ✋ 💥 👊 ✋ 💥 👊 ✋ 💥 👊 ✋ 💥 👊 ✋ 💥
+    </div>
+
+    <div id="achievement-box">🏆 BAŞARIM!</div>
 
     <div class="game-rules">
-        <h3>🎮 OYUN KURALLARI VE İPUÇLARI</h3>
-        <ul>
-            <li><b>Tokatla Butonu:</b> Furkan'a haddini bildir. Her tokat canını azaltır!</li>
-            <li><b>Can Barı:</b> Furkan'ın canını takip et. Canı bitince kısa süre bayılır ve sonra daha sinirli döner!</li>
-            <li><b>Altın Tokat:</b> Bazen buton altın parlar. O an basarsan +50 tokat kazanırsın!</li>
-            <li><b>Furkan'ın İntikamı:</b> Dikkat! Bazen Furkan karşı saldırıya geçip ekranını çatlatır.</li>
-            <li><b>Kim Vurdu?:</b> Furkan bazen suçlu tahmini yapar. Doğruyu bulursan "YAKALANDIN!" der.</li>
-            <li><b>Unvan Sistemi:</b> Attığın tokat sayısına göre yeni unvanlar kazanırsın.</li>
-            <li><b>Başarımlar:</b> Gizli hedeflere ulaş ve özel başarımlar kazan.</li>
-            <li><b>Medya Paneli (1-30):</b> Furkan'ın özel anlarını izle veya dinle.</li>
-        </ul>
+        <b>KURALLAR:</b> Tokatla butonuna basınca Furkan <b>tam ekran</b> sarsılır! Canı bitince bayılır. 
+        Sorgu panelinde Furkan'ın tahminini doğru bilirsen yakalanırsın!
     </div>
 
     <div class="counter-box">TOKAT: <span id="counter">0</span></div>
-    <div id="unvan">Unvan: Acemi</div>
+    
+    <div class="health-container"><div id="health-bar"></div></div>
 
-    <div class="health-container">
-        <div id="health-bar"></div>
-    </div>
-
-    <div class="stage-container" id="stage">
-        <div class="side-text">DAYAK ARSIZI</div>
-        <div class="main-display">
+    <div class="stage-container" id="stage" style="display: flex; align-items: center; gap: 20px;">
+        <h2 style="writing-mode: vertical-rl; color: #ff4757;">DAYAK ARSIZI</h2>
+        <div class="main-display" id="video-wrapper">
             <img src="FURKAN.jpeg" id="furkan-img">
             <video id="main-video" playsinline></video>
-            <div id="suspect-panel">
-                <p id="suspect-question" style="color:#ffcc00; padding:15px;"></p>
-                <div id="suspect-buttons"></div>
-            </div>
         </div>
-        <div class="side-text">FURKAN</div>
+        <h2 style="writing-mode: vertical-rl; color: #ff4757;">FURKAN</h2>
     </div>
 
     <button id="main-tokat-btn" class="tokat-btn" onclick="tokatla()">✋ TOKATLA ✋</button>
@@ -235,76 +146,50 @@
         const tSes = document.getElementById('tokat-ses');
         const gAudio = document.getElementById('general-audio');
         const counterText = document.getElementById('counter');
-        const unvanText = document.getElementById('unvan');
         const healthBar = document.getElementById('health-bar');
         const body = document.getElementById('body-main');
         const mainBtn = document.getElementById('main-tokat-btn');
-        const stage = document.getElementById('stage');
-        const suspectPanel = document.getElementById('suspect-panel');
+        const videoWrapper = document.getElementById('video-wrapper');
 
         let count = parseInt(localStorage.getItem('tokatSayisi')) || 0;
         let health = 100;
-        let lastClips = [];
-        let isGold = false;
-
         counterText.innerText = count;
-        updateUnvan();
-
-        const tepkiler = ["AH!", "YAVAŞ!", "😢", "ACIMADI!", "VURMA!", "YETER!", "😭😭😭", "ŞLAP!", "KÜT!", "Aİİİ!"];
-        const supheliler = ["Ali", "Mehmet", "Emre", "Recep", "Aşkım", "Annem"];
 
         function tokatla() {
             if (health <= 0) return;
 
-            if (isGold) {
-                count += 50;
-                isGold = false;
-                mainBtn.classList.remove('gold-tokat');
-                showAchievement("👑 ALTIN ŞAMAR!");
-            } else {
-                count++;
-                if (Math.random() < 0.02) { // %2 ihtimalle Altın Tokat çıksın
-                    isGold = true;
-                    mainBtn.classList.add('gold-tokat');
-                }
-            }
-
+            count++;
             counterText.innerText = count;
             localStorage.setItem('tokatSayisi', count);
-            
+
             health -= 10;
             healthBar.style.width = health + "%";
-            if (health <= 0) furkanBayildi();
 
-            img.style.filter = `sepia(0.5) saturate(${2 + count/50}) hue-rotate(-${Math.min(count/3, 80)}deg)`;
+            // VİDEOYU OYNAT VE TAM EKRAN YAP
+            vdo.src = "TOKAT.mp4";
+            vdo.style.display = 'block';
+            vdo.classList.add('full-screen-anim'); // Tam ekran sınıfını ekle
+            vdo.play().catch(() => {});
             
-            body.classList.add('shake-active', 'flash-effect');
-            setTimeout(() => body.classList.remove('shake-active', 'flash-effect'), 200);
+            tSes.currentTime = 0;
+            tSes.play().catch(() => {});
 
-            if (count == 1) showAchievement("🩸 İLK KAN");
-            if (count == 500) showAchievement("🥊 ZALİM TOKATÇI");
-            if (count == 1000) showAchievement("🏆 DAYAK ARŞİVİSTİ");
+            // Sarsıntı efekti
+            body.classList.add('shake-active');
+            
+            vdo.onended = () => {
+                vdo.classList.remove('full-screen-anim'); // Bitince normale dön
+                vdo.style.display = 'none';
+                body.classList.remove('shake-active');
+                if (health <= 0) furkanBayildi();
+            };
 
-            if (Math.random() < 0.05) furkanIntikam(); // %5 ihtimalle intikam
-            if (Math.random() < 0.15 && health > 0) { askQuestion(); return; } // %15 ihtimalle soru
-
-            createBalon();
-            playTokat();
-            updateUnvan();
-        }
-
-        function createBalon() {
-            const b = document.createElement('div');
-            b.className = 'balon';
-            b.innerText = tepkiler[Math.floor(Math.random() * tepkiler.length)];
-            b.style.top = Math.random() * 50 + "%";
-            b.style.left = Math.random() * 60 + "%";
-            stage.appendChild(b);
-            setTimeout(() => b.remove(), 700);
+            // Kızarma efekti
+            img.style.filter = `sepia(0.5) saturate(${2 + count/100}) hue-rotate(-${Math.min(count/5, 60)}deg)`;
         }
 
         function furkanBayildi() {
-            img.style.filter = "grayscale(1) blur(2px) sepia(1)";
+            img.style.filter = "grayscale(1) brightness(0.5)";
             mainBtn.innerText = "DİRİLİYOR...";
             mainBtn.disabled = true;
             setTimeout(() => {
@@ -316,64 +201,20 @@
             }, 3000);
         }
 
-        function furkanIntikam() {
-            document.getElementById('crack-screen').style.display = 'block';
-            body.style.backgroundColor = "#ff0000";
-            setTimeout(() => {
-                document.getElementById('crack-screen').style.display = 'none';
-                body.style.backgroundColor = "#0a0a0a";
-            }, 800);
-        }
-
-        function showAchievement(txt) {
-            const box = document.getElementById('achievement-box');
-            box.innerText = "🏆 " + txt;
-            box.style.display = 'block';
-            setTimeout(() => box.style.display = 'none', 3000);
-        }
-
-        function askQuestion() {
-            mainBtn.disabled = true;
-            const tahmini = supheliler[Math.floor(Math.random() * supheliler.length)];
-            suspectPanel.style.display = 'flex';
-            document.getElementById('suspect-question').innerHTML = `KİM VURDU? <br><br><b>${tahmini}</b> vurdu demi?`;
-            const sButtons = document.getElementById('suspect-buttons');
-            sButtons.innerHTML = '';
-            supheliler.forEach(s => {
-                const btn = document.createElement('button');
-                btn.className = 'suspect-btn';
-                btn.innerText = s;
-                btn.onclick = () => {
-                    if(s === tahmini) alert("YAKALANDIN! Vay hain!");
-                    else alert("Senden hiç beklemezdim...");
-                    suspectPanel.style.display = 'none';
-                    mainBtn.disabled = false;
-                };
-                sButtons.appendChild(btn);
-            });
-        }
-
-        function playTokat() {
-            vdo.src = "TOKAT.mp4"; vdo.style.display = 'block'; vdo.play().catch(()=>{});
-            tSes.currentTime = 0; tSes.play().catch(()=>{});
-            vdo.onended = () => vdo.style.display = 'none';
-        }
-
-        function updateUnvan() {
-            if(count < 100) unvanText.innerText = "Unvan: Acemi Tokatçı";
-            else if(count < 500) unvanText.innerText = "Unvan: Zalim Tokatçı";
-            else if(count < 1000) unvanText.innerText = "Unvan: Dayak Arsızı Ustası";
-            else unvanText.innerText = "Unvan: EBEDİ DAYAK ARSİSTİ";
-        }
-
+        // 30 Buton
         const grid = document.getElementById('grid');
         for (let i = 1; i <= 30; i++) {
             const b = document.createElement('button');
-            b.className = 'num-btn'; b.innerText = i;
-            b.style.backgroundColor = `hsl(${i * 137.5}, 60%, 40%)`;
+            b.className = 'num-btn';
+            b.innerText = i;
+            b.style.backgroundColor = `hsl(${i * 137}, 60%, 40%)`;
             b.onclick = () => {
                 gAudio.src = i + ".mp3";
-                gAudio.play().catch(() => { vdo.src = i + ".mp4"; vdo.style.display='block'; vdo.play(); });
+                gAudio.play().catch(() => {
+                    vdo.src = i + ".mp4";
+                    vdo.style.display = 'block';
+                    vdo.play();
+                });
             };
             grid.appendChild(b);
         }
