@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dayak Arsızı Furkan - DEDEKTİF MOD</title>
+    <title>Dayak Arsızı Furkan - EFSANE MOD</title>
     <style>
-        /* --- ANİMASYONLAR --- */
+        /* --- ANİMASYONLAR VE EFEKTLER --- */
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
             20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
         @keyframes combo-bg {
@@ -20,6 +21,7 @@
         }
         .shake-active { animation: shake 0.2s infinite; }
         .combo-active { animation: combo-bg 0.1s infinite !important; }
+        .flash-effect { filter: brightness(2.5) contrast(1.5); }
 
         body {
             font-family: 'Arial Black', sans-serif;
@@ -30,9 +32,12 @@
             align-items: center;
             padding: 20px;
             margin: 0;
+            transition: background-color 0.1s, filter 0.1s;
         }
 
-        /* TALİMATLAR PANELİ */
+        button { touch-action: manipulation; } /* Mobil hızlandırma */
+
+        /* ÜST PANEL */
         .instructions {
             background: rgba(255, 255, 255, 0.05);
             border: 2px dashed #ff4757;
@@ -40,16 +45,18 @@
             border-radius: 15px;
             margin-bottom: 20px;
             max-width: 600px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-align: center;
         }
-        .instructions b { color: #ffcc00; }
 
         .counter-box {
             font-size: 2.5rem;
             color: #ffcc00;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
         }
+
+        #unvan { font-size: 1.2rem; color: #00ffcc; margin-bottom: 15px; }
 
         .stage-container {
             display: flex;
@@ -67,6 +74,7 @@
             writing-mode: vertical-rl;
             text-transform: uppercase;
             text-shadow: 3px 3px 0px #fff;
+            user-select: none;
         }
 
         .main-display {
@@ -79,15 +87,10 @@
             border: 8px solid #ff4757;
         }
 
-        #furkan-img, #main-video {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            position: absolute;
-        }
-
+        #furkan-img, #main-video { width: 100%; height: 100%; object-fit: cover; position: absolute; }
         #main-video { display: none; z-index: 2; }
 
-        /* Konuşma Balonları */
+        /* Konuşma Balonu */
         .balon {
             position: absolute;
             background: white;
@@ -96,62 +99,80 @@
             border-radius: 15px;
             font-weight: bold;
             z-index: 100;
+            box-shadow: 5px 5px 0px #ff4757;
         }
 
-        /* Suçlu Seçim Paneli */
+        /* Sorgu Paneli */
         #suspect-panel {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 300;
-            text-align: center;
         }
 
         .suspect-btn {
-            background: #444;
+            background: #ff4757;
             color: white;
             border: 2px solid #fff;
-            padding: 8px 15px;
+            padding: 10px 20px;
             margin: 5px;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 1rem;
+            font-weight: bold;
         }
-        .suspect-btn:hover { background: #ff4757; }
 
         .tokat-btn {
-            padding: 15px 50px;
+            padding: 20px 60px;
             font-size: 2rem;
             background: #ff4757;
             color: white;
             border: 4px solid white;
             border-radius: 100px;
             cursor: pointer;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+
+        .share-btn {
+            background: #25d366; /* WhatsApp Yeşili */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 30px;
         }
 
         .grid-container {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
             gap: 8px;
+            margin-bottom: 50px;
         }
 
         .num-btn { width: 50px; height: 50px; border: none; border-radius: 8px; color: white; cursor: pointer; }
+
+        @media (max-width: 800px) {
+            .side-text { font-size: 1.5rem; }
+            .main-display { width: 280px; height: 280px; }
+            .grid-container { grid-template-columns: repeat(5, 1fr); }
+        }
     </style>
 </head>
 <body id="body-main">
 
     <div class="instructions">
-        <b>NASIL OYNANIR:</b> Tokatla butonuna basarak Furkan'ı sars! <br>
-        Furkan bazen durup <b>suçlu tahmini</b> yapar. Eğer doğruyu seçersen <b>YAKALANDIN!</b> yazısı çıkar. <br>
-        Alt panelden (1-30) Furkan'ın özel arşivini açabilirsin.
+        <b>BİLGİ:</b> Furkan'ı tokatla, unvan kazan! <br>
+        Furkan suçlu tahmini yapınca doğru ismi seçmezsen seni hain ilan eder. <br>
+        Hızlı basarsan <b>KOMBO</b> açılır!
     </div>
 
     <div class="counter-box">TOKAT: <span id="counter">0</span></div>
+    <div id="unvan">Unvan: Acemi Tokatçı</div>
 
     <div class="stage-container" id="stage">
         <div class="side-text">DAYAK ARSIZI</div>
@@ -160,7 +181,7 @@
             <video id="main-video" playsinline></video>
             
             <div id="suspect-panel">
-                <p id="suspect-question" style="color:#ffcc00; padding:10px;"></p>
+                <p id="suspect-question" style="color:#ffcc00; padding:15px; font-size: 1.2rem;"></p>
                 <div id="suspect-buttons"></div>
             </div>
         </div>
@@ -168,6 +189,8 @@
     </div>
 
     <button id="main-tokat-btn" class="tokat-btn" onclick="tokatla()">✋ TOKATLA ✋</button>
+    
+    <button class="share-btn" onclick="shareScore()">🟢 Skoru WhatsApp'ta Paylaş</button>
 
     <div class="grid-container" id="grid"></div>
 
@@ -180,6 +203,7 @@
         const tSes = document.getElementById('tokat-ses');
         const gAudio = document.getElementById('general-audio');
         const counterText = document.getElementById('counter');
+        const unvanText = document.getElementById('unvan');
         const body = document.getElementById('body-main');
         const stage = document.getElementById('stage');
         const suspectPanel = document.getElementById('suspect-panel');
@@ -189,42 +213,63 @@
 
         let count = parseInt(localStorage.getItem('tokatSayisi')) || 0;
         let lastClips = [];
+        updateUnvan();
         counterText.innerText = count;
 
-        const tepkiler = ["AH!", "YAVAŞ!", "😭😭😭", "😢", "ELİNE SAĞLIK!", "VURMAA!", "ANNEMEE DİCEM!", "😢😢"];
+        const tepkiler = ["AH!", "YAVAŞ!", "😭😭😭", "😢", "ELİNE SAĞLIK!", "VURMAA!", "ANNEMEE DİCEM!", "😢😢", "KİM VURDU?", "ŞAPLAĞI YEDİK!"];
         const supheliler = ["Ali", "Mehmet", "Emre", "Recep", "Aşkım", "Annem"];
 
         function tokatla() {
             count++;
             counterText.innerText = count;
             localStorage.setItem('tokatSayisi', count);
+            updateUnvan();
 
+            // %15 İhtimalle Sorgu Modu
             if (Math.random() < 0.15) {
                 askQuestion();
                 return;
             }
 
-            img.style.filter = `sepia(0.5) saturate(2) hue-rotate(-50deg) brightness(${1.2 - (count/1000)})`;
+            // FLAŞ VE SARSINTI EFEKTİ
+            body.classList.add('shake-active', 'flash-effect');
+            setTimeout(() => body.classList.remove('shake-active', 'flash-effect'), 200);
 
+            // KIZARMA (Max 1000 tokatta tam kızarıklık)
+            let redness = Math.min(count / 10, 100);
+            img.style.filter = `sepia(0.5) saturate(${1 + redness/50}) hue-rotate(-${redness/2}deg)`;
+
+            // BALON
             const b = document.createElement('div');
             b.className = 'balon';
             b.innerText = tepkiler[Math.floor(Math.random() * tepkiler.length)];
             b.style.top = Math.random() * 50 + "%";
             b.style.left = Math.random() * 60 + "%";
             stage.appendChild(b);
-            setTimeout(() => b.remove(), 700);
+            setTimeout(() => b.remove(), 600);
 
-            body.classList.add('shake-active');
-            setTimeout(() => body.classList.remove('shake-active'), 300);
+            // KOMBO SİSTEMİ
+            const now = Date.now();
+            lastClips.push(now);
+            lastClips = lastClips.filter(t => now - t < 1500);
+            if(lastClips.length > 7) {
+                body.classList.add('combo-active');
+                setTimeout(() => body.classList.remove('combo-active'), 800);
+            }
 
             playMedia();
         }
 
+        function updateUnvan() {
+            if(count < 100) unvanText.innerText = "Unvan: Acemi Tokatçı";
+            else if(count < 500) unvanText.innerText = "Unvan: Zalim Tokatçı";
+            else if(count < 1000) unvanText.innerText = "Unvan: Dayak Uzmanı";
+            else unvanText.innerText = "Unvan: EFSANE DAYAK ARSIZI";
+        }
+
         function askQuestion() {
             mainBtn.disabled = true;
-            // Furkan rastgele birini suçluyor
             const furkaninTahmini = supheliler[Math.floor(Math.random() * supheliler.length)];
-            
             suspectPanel.style.display = 'flex';
             suspectQuestion.innerHTML = `KİM VURDU LAN BANA?<br><br><b>${furkaninTahmini}</b> vurdu demi?`;
             suspectButtons.innerHTML = '';
@@ -237,7 +282,7 @@
                     if (s === furkaninTahmini) {
                         alert("YAKALANDIN! \nFurkan: Vay hain " + s + ", biliyordum senin olduğunu!");
                     } else {
-                        alert("Furkan: Senden hiç beklemezdim... Beni kandırma!");
+                        alert("Furkan: Senden hiç beklemezdim " + s + "... Beni kandırma!");
                     }
                     suspectPanel.style.display = 'none';
                     mainBtn.disabled = false;
@@ -256,12 +301,18 @@
             vdo.onended = () => vdo.style.display = 'none';
         }
 
+        function shareScore() {
+            const msg = `Furkan'ı tam ${count} kez tokatladım ve "${unvanText.innerText}" unvanını aldım! Hadi sen de tokatla: [SITE_LINKINIZ]`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // 30 Buton
         const grid = document.getElementById('grid');
         for (let i = 1; i <= 30; i++) {
             const btn = document.createElement('button');
             btn.className = 'num-btn';
             btn.innerText = i;
-            btn.style.backgroundColor = `hsl(${i * 137}, 60%, 40%)`;
+            btn.style.backgroundColor = `hsl(${i * 137.5}, 60%, 40%)`;
             btn.onclick = () => {
                 gAudio.src = i + ".mp3";
                 gAudio.play().catch(() => {
