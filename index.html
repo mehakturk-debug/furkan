@@ -3,8 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dayak Arsızı Furkan</title>
+    <title>Dayak Arsızı Furkan - Sarsıntı Efektli</title>
     <style>
+        /* SARSINTI ANİMASYONU */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .shake-active {
+            animation: shake 0.5s;
+            animation-iteration-count: infinite;
+        }
+
         body {
             font-family: 'Arial Black', sans-serif;
             background-color: #0a0a0a;
@@ -15,7 +35,11 @@
             padding: 20px;
             margin: 0;
             overflow-x: hidden;
+            transition: background-color 0.1s;
         }
+
+        /* Arka plan tokat anında kırmızımsı olsun */
+        .hit-bg { background-color: #220000; }
 
         .counter-box {
             font-size: 3rem;
@@ -24,7 +48,6 @@
             text-shadow: 0 0 15px rgba(255, 204, 0, 0.7);
         }
 
-        /* Ana Alan: Yazı - Video - Yazı */
         .stage-container {
             display: flex;
             align-items: center;
@@ -37,10 +60,11 @@
             font-size: 5rem;
             font-weight: 900;
             color: #ff4757;
-            writing-mode: vertical-rl; /* Yazıyı dikey yapar */
+            writing-mode: vertical-rl;
             text-transform: uppercase;
             text-shadow: 4px 4px 0px #fff, 8px 8px 0px #000;
             line-height: 1;
+            user-select: none;
         }
 
         .main-display {
@@ -82,7 +106,6 @@
             box-shadow: 0 5px 0px #b33939;
         }
 
-        /* 30 Buton */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
@@ -103,23 +126,16 @@
             font-size: 1.2rem;
             cursor: pointer;
         }
-
-        /* Mobil uyum */
-        @media (max-width: 800px) {
-            .side-text { font-size: 2rem; }
-            .main-display { width: 250px; height: 250px; }
-            .grid-container { grid-template-columns: repeat(5, 1fr); }
-        }
     </style>
 </head>
-<body>
+<body id="body-main">
 
     <div class="counter-box">TOPLAM TOKAT: <span id="counter">0</span></div>
 
     <div class="stage-container">
         <div class="side-text">DAYAK ARSIZI</div>
         
-        <div class="main-display">
+        <div class="main-display" id="video-area">
             <img src="FURKAN.jpeg" id="furkan-img">
             <video id="main-video" playsinline></video>
         </div>
@@ -140,6 +156,7 @@
         const tSes = document.getElementById('tokat-ses');
         const gAudio = document.getElementById('general-audio');
         const counterText = document.getElementById('counter');
+        const body = document.getElementById('body-main');
 
         let count = parseInt(localStorage.getItem('tokatSayisi')) || 0;
         counterText.innerText = count;
@@ -149,7 +166,15 @@
             counterText.innerText = count;
             localStorage.setItem('tokatSayisi', count);
 
-            // Tokat Efekti
+            // SARSINTI VE EFEKTİ BAŞLAT
+            body.classList.add('shake-active', 'hit-bg');
+            
+            // 0.5 saniye sonra sarsıntıyı durdur
+            setTimeout(() => {
+                body.classList.remove('shake-active', 'hit-bg');
+            }, 500);
+
+            // Tokat Videosunu Oynat
             vdo.src = "TOKAT.mp4";
             vdo.style.display = 'block';
             vdo.currentTime = 0;
@@ -171,7 +196,6 @@
             b.onclick = () => {
                 gAudio.src = i + ".mp3";
                 gAudio.play().catch(() => {
-                    // mp3 yoksa videoyu dene
                     vdo.src = i + ".mp4";
                     vdo.style.display = 'block';
                     vdo.play();
