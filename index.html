@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dayak Arsızı Furkan - ULTIMATE SIMULATION</title>
+    <title>Dayak Arsızı Furkan - Efsane v14</title>
     <style>
-        /* --- ARKA PLAN VE HAREKETLİ EMOJİLER --- */
+        /* --- GENEL TASARIM VE ARKA PLAN --- */
         body {
             font-family: 'Arial Black', sans-serif;
             background-color: #050505;
@@ -30,32 +30,26 @@
 
         .emoji-layer span {
             position: absolute;
-            animation: move-around 15s infinite linear;
+            animation: move-around 12s infinite linear;
         }
 
         @keyframes move-around {
             0% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(50px, 100px) rotate(180deg); }
+            50% { transform: translate(40px, 80px) rotate(180deg); }
             100% { transform: translate(0, 0) rotate(360deg); }
         }
 
-        /* ÜST BAŞLIK VE GÜNLÜK */
-        .top-title { font-size: 3rem; color: #ff4757; text-shadow: 3px 3px 0px #fff; margin-bottom: 5px; }
+        /* BAŞLIKLAR */
+        .top-title { font-size: 3rem; color: #ff4757; text-shadow: 3px 3px 0px #fff; margin-bottom: 5px; text-align: center; }
         
         #furkan-status {
-            font-style: italic;
-            color: #00ffcc;
-            background: rgba(0,0,0,0.6);
-            padding: 5px 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #00ffcc;
+            font-style: italic; color: #00ffcc; background: rgba(0,0,0,0.6);
+            padding: 5px 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #00ffcc;
         }
 
         #unvan-etiketi {
-            background: #ffcc00; color: black;
-            padding: 5px 20px; border-radius: 50px;
-            font-size: 1.1rem; margin-bottom: 15px;
+            background: #ffcc00; color: black; padding: 5px 20px;
+            border-radius: 50px; font-size: 1.1rem; margin-bottom: 15px;
         }
 
         /* OYUN ALANI */
@@ -64,18 +58,12 @@
             width: 320px; height: 320px;
             background: #000; border-radius: 20px;
             overflow: hidden; border: 6px solid #ff4757;
+            perspective: 1000px;
         }
 
-        #furkan-img { width: 100%; height: 100%; object-fit: cover; position: absolute; transition: transform 0.1s; }
-        #main-video { display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; }
+        #furkan-img { width: 100%; height: 100%; object-fit: cover; position: absolute; transition: transform 0.1s ease-out; }
+        #main-video { display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 10; }
 
-        /* GÖZ TAKİBİ (Simüle edilmiş göz bebeği efekti) */
-        .eye-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 5;
-        }
-
-        /* TAM EKRAN VİDEO */
         .full-screen-anim {
             position: fixed !important; top: 0 !important; left: 0 !important;
             width: 100vw !important; height: 100vh !important;
@@ -87,46 +75,52 @@
             padding: 15px 50px; font-size: 2rem; background: #ff4757;
             color: white; border: 4px solid white; border-radius: 100px;
             cursor: pointer; font-weight: 900; margin-top: 15px;
-            box-shadow: 0 8px 0 #b33939;
+            box-shadow: 0 8px 0 #b33939; transition: 0.1s;
         }
         .tokat-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #b33939; }
 
         .health-container { width: 320px; height: 15px; background: #333; border-radius: 10px; margin-bottom: 10px; overflow: hidden; border: 1px solid #fff; }
         #health-bar { width: 100%; height: 100%; background: #ff4757; transition: 0.2s; }
 
-        .grid-container { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin-top: 20px; }
-        .num-btn { width: 40px; height: 40px; border: none; border-radius: 5px; color: white; cursor: pointer; }
+        /* BUTON GRİDİ - Araları Açıldı */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 15px; /* Buton arası boşluk artırıldı */
+            margin-top: 30px;
+            padding: 10px;
+        }
+        .num-btn { width: 50px; height: 50px; border: none; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .num-btn:hover { transform: scale(1.1); }
 
         #music-control { position: fixed; top: 10px; right: 10px; background: #222; color: #fff; padding: 5px 10px; cursor: pointer; border-radius: 5px; z-index: 100; border: 1px solid #ffcc00; }
         
-        .rules-box { background: rgba(20,20,20,0.9); padding: 10px; border-radius: 10px; border: 1px dashed #ff4757; margin-bottom: 15px; font-size: 0.8rem; text-align: center; }
+        @media (max-width: 650px) {
+            .top-title { font-size: 1.8rem; }
+            .grid-container { grid-template-columns: repeat(5, 1fr); gap: 10px; }
+            .num-btn { width: 45px; height: 45px; }
+        }
     </style>
 </head>
 <body id="body-main">
 
     <div class="emoji-layer" id="emojiLayer"></div>
 
-    <button id="music-control" onclick="toggleMusic()">🎵 Müziği Başlat</button>
     <audio id="bg-music" loop>
-        <source src="https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptitle=Eye+of+the+Tiger&filename=mt/MTY4NDcyNDExNjgzOTkx_3H_2fV8e8vH_2bo.mp3" type="audio/mpeg">
+        <source src="2.mp3" type="audio/mpeg">
     </audio>
+    <button id="music-control" onclick="toggleMusic()">🎵 Müzik: Kapalı</button>
 
     <h1 class="top-title">DAYAK ARSIZI FURKAN</h1>
-    <div id="furkan-status">Furkan: Şu an çok huzurlu...</div>
+    <div id="furkan-status">Furkan: Antrenmana hazır mısın?</div>
     <div id="unvan-etiketi">Unvan: Acemi Tokatçı</div>
 
-    <div class="rules-box">
-        <b>KOMBO:</b> 10 saniye aralıksız vurursan <b>SÜPER ŞAMAR</b> tetiklenir! <br>
-        Furkan seni izliyor, fareni takip ediyor! Müzik açıkken motivasyon artar.
-    </div>
-
-    <div style="font-size: 2rem; color: #ffcc00;">TOKAT: <span id="counter">0</span></div>
+    <div style="font-size: 2rem; color: #ffcc00; margin-bottom: 5px;">TOKAT: <span id="counter">0</span></div>
     
     <div class="health-container"><div id="health-bar"></div></div>
 
     <div class="main-display" id="game-area">
         <img src="FURKAN.jpeg" id="furkan-img">
-        <div class="eye-overlay"></div>
         <video id="main-video" playsinline></video>
     </div>
 
@@ -151,53 +145,47 @@
 
         let count = parseInt(localStorage.getItem('tokatSayisi')) || 0;
         let health = 100;
-        let lastHitTime = 0;
-        let comboCount = 0;
+        let firstClick = true;
 
         counterText.innerText = count;
         updateUnvan();
 
-        // 1. GÜNLÜK SİSTEMİ (Random Durumlar)
-        const durumlar = [
-            "Şu an buz torbası arıyor...", 
-            "Annesine şikayet etmeyi düşünüyor.", 
-            "Yediği şamarların çetelesini tutuyor.",
-            "Acıdan kulakları çınlıyor...",
-            "Kaçacak yer arıyor!",
-            "İçinden Rocky müziği söylüyor."
-        ];
-        setInterval(() => {
-            if(health > 0) statusText.innerText = "Furkan: " + durumlar[Math.floor(Math.random() * durumlar.length)];
-        }, 8000);
+        // Müzik Kontrolü
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                document.getElementById('music-control').innerText = "🔊 Müzik: Açık";
+            } else {
+                bgMusic.pause();
+                document.getElementById('music-control').innerText = "🎵 Müzik: Kapalı";
+            }
+        }
 
-        // 2. GÖZ TAKİBİ (Resmi hafifçe fareye döndürür)
+        // Göz Takibi (Mouse Follow)
         document.addEventListener('mousemove', (e) => {
             if (vdo.style.display !== 'block') {
-                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-                img.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+                const x = (window.innerWidth / 2 - e.pageX) / 20;
+                const y = (window.innerHeight / 2 - e.pageY) / 20;
+                img.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
             }
         });
-
-        function toggleMusic() {
-            if (bgMusic.paused) { bgMusic.play(); document.getElementById('music-control').innerText = "🔇 Müziği Durdur"; }
-            else { bgMusic.pause(); document.getElementById('music-control').innerText = "🎵 Müziği Başlat"; }
-        }
 
         function updateUnvan() {
             if (count < 50) unvanEtiketi.innerText = "Unvan: Acemi Tokatçı";
             else if (count < 200) unvanEtiketi.innerText = "Unvan: Zalim Tokatçı";
-            else if (count < 1000) unvanEtiketi.innerText = "Unvan: Tokat Profesörü";
+            else if (count < 500) unvanEtiketi.innerText = "Unvan: Tokat Ustası";
             else unvanEtiketi.innerText = "Unvan: EFSANE DAYAK ARSIZI";
         }
 
         function tokatla() {
             if (health <= 0) return;
 
-            const now = Date.now();
-            if (now - lastHitTime < 1000) comboCount++;
-            else comboCount = 0;
-            lastHitTime = now;
+            // İlk tokata basınca müziği otomatik başlat (Tarayıcı kuralı için)
+            if (firstClick) {
+                bgMusic.play().catch(() => {});
+                document.getElementById('music-control').innerText = "🔊 Müzik: Açık";
+                firstClick = false;
+            }
 
             count++;
             counterText.innerText = count;
@@ -207,18 +195,12 @@
             health -= 10;
             healthBar.style.width = health + "%";
 
-            // 3. SES DEĞİŞTİRİCİ (Pitch Shift Simülasyonu)
-            tSes.playbackRate = 0.8 + Math.random() * 0.4; // Sesi %80 ile %120 hızda rastgele çalar
+            // Rastgele Pitch Shift (Ses değişimi)
+            tSes.playbackRate = 0.8 + Math.random() * 0.4;
             tSes.currentTime = 0;
             tSes.play().catch(() => {});
 
-            // 4. SÜPER ŞAMAR (15 Kombo sonrası)
-            if (comboCount > 15) {
-                statusText.innerText = "Furkan: SÜPER ŞAMAR YEDİ!";
-                body.style.filter = "invert(1)";
-                setTimeout(() => body.style.filter = "none", 200);
-            }
-
+            // Video Tam Ekran
             vdo.src = "TOKAT.mp4";
             vdo.style.display = 'block';
             vdo.classList.add('full-screen-anim');
@@ -230,11 +212,12 @@
                 if (health <= 0) furkanBayildi();
             };
 
+            // Görsel Kızarma
             img.style.filter = `sepia(0.5) saturate(${2 + count/100}) hue-rotate(-${Math.min(count/5, 80)}deg)`;
         }
 
         function furkanBayildi() {
-            statusText.innerText = "Furkan: BAYILDI (Pert)";
+            statusText.innerText = "Furkan: Bayıldı (Nakavt!)";
             img.style.filter = "grayscale(1) blur(5px)";
             mainBtn.innerText = "DİRİLİYOR...";
             mainBtn.disabled = true;
@@ -244,11 +227,11 @@
                 img.style.filter = "none";
                 mainBtn.innerText = "✋ TOKATLA ✋";
                 mainBtn.disabled = false;
-                statusText.innerText = "Furkan: Geri döndüm, canımı sıkma!";
+                statusText.innerText = "Furkan: Eye of the Tiger çalıyor, yıkılmam!";
             }, 3000);
         }
 
-        // Medya Butonları
+        // 1-30 Butonlar Oluşturucu
         const grid = document.getElementById('grid');
         for (let i = 1; i <= 30; i++) {
             const b = document.createElement('button');
@@ -266,14 +249,14 @@
             grid.appendChild(b);
         }
 
-        // 5. HAREKETLİ EMOJİLER
+        // Hareketli Emojiler
         const emojis = ['👊', '✋', '💥', '🥊', '💢'];
         for (let i = 0; i < 25; i++) {
             const span = document.createElement('span');
             span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-            span.style.left = Math.random() * 95 + "vw";
-            span.style.top = Math.random() * 95 + "vh";
-            span.style.fontSize = (Math.random() * 2 + 1.5) + "rem";
+            span.style.left = Math.random() * 90 + "vw";
+            span.style.top = Math.random() * 90 + "vh";
+            span.style.fontSize = (Math.random() * 2 + 2) + "rem";
             span.style.animationDuration = (Math.random() * 5 + 10) + "s";
             document.getElementById('emojiLayer').appendChild(span);
         }
