@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dayak Arsızı Furkan - Sarsıntı Efektli</title>
+    <title>Dayak Arsızı Furkan - ULTRA MOD v4</title>
     <style>
-        /* SARSINTI ANİMASYONU */
+        /* --- ANİMASYONLAR --- */
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             10% { transform: translate(-1px, -2px) rotate(-1deg); }
@@ -13,18 +13,20 @@
             30% { transform: translate(3px, 2px) rotate(0deg); }
             40% { transform: translate(1px, -1px) rotate(1deg); }
             50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
-        .shake-active {
-            animation: shake 0.5s;
-            animation-iteration-count: infinite;
+        @keyframes combo-bg {
+            0% { background-color: #ff0000; }
+            33% { background-color: #00ff00; }
+            66% { background-color: #0000ff; }
+            100% { background-color: #ff0000; }
         }
 
+        .shake-active { animation: shake 0.2s infinite; }
+        .combo-active { animation: combo-bg 0.1s infinite !important; }
+
+        /* --- GENEL TASARIM --- */
         body {
             font-family: 'Arial Black', sans-serif;
             background-color: #0a0a0a;
@@ -38,8 +40,22 @@
             transition: background-color 0.1s;
         }
 
-        /* Arka plan tokat anında kırmızımsı olsun */
-        .hit-bg { background-color: #220000; }
+        .hit-bg { background-color: #440000; }
+
+        /* BİLGİLENDİRME PANELİ */
+        .info-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed #ff4757;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            max-width: 600px;
+            text-align: left;
+        }
+        .info-panel h3 { margin-top: 0; color: #ffcc00; text-align: center; }
+        .info-panel ul { list-style: none; padding: 0; margin: 0; }
+        .info-panel li { margin-bottom: 8px; font-size: 0.9rem; border-bottom: 1px solid #222; padding-bottom: 4px; }
+        .info-panel b { color: #ff4757; }
 
         .counter-box {
             font-size: 3rem;
@@ -54,6 +70,7 @@
             justify-content: center;
             gap: 40px;
             margin-bottom: 30px;
+            position: relative;
         }
 
         .side-text {
@@ -63,7 +80,6 @@
             writing-mode: vertical-rl;
             text-transform: uppercase;
             text-shadow: 4px 4px 0px #fff, 8px 8px 0px #000;
-            line-height: 1;
             user-select: none;
         }
 
@@ -79,13 +95,25 @@
         }
 
         #furkan-img, #main-video {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             object-fit: cover;
             position: absolute;
         }
 
         #main-video { display: none; z-index: 2; }
+
+        .balon {
+            position: absolute;
+            background: white;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            border: 3px solid black;
+            z-index: 100;
+            pointer-events: none;
+        }
 
         .tokat-btn {
             padding: 20px 60px;
@@ -101,45 +129,48 @@
             transition: 0.1s;
         }
 
-        .tokat-btn:active {
-            transform: translateY(5px);
-            box-shadow: 0 5px 0px #b33939;
-        }
+        .tokat-btn:active { transform: translateY(5px); box-shadow: 0 5px 0px #b33939; }
 
         .grid-container {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
             gap: 10px;
-            max-width: 900px;
-            padding: 20px;
             background: #1a1a1a;
+            padding: 20px;
             border-radius: 20px;
+            margin-bottom: 50px;
         }
 
-        .num-btn {
-            width: 60px;
-            height: 60px;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            cursor: pointer;
+        .num-btn { width: 60px; height: 60px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .num-btn:hover { transform: scale(1.1); }
+
+        @media (max-width: 800px) {
+            .side-text { font-size: 2rem; }
+            .main-display { width: 280px; height: 280px; }
+            .grid-container { grid-template-columns: repeat(5, 1fr); }
         }
     </style>
 </head>
 <body id="body-main">
 
+    <div class="info-panel">
+        <h3>📖 FURKAN'I TOKATLAMA REHBERİ</h3>
+        <ul>
+            <li>✋ <b>TOKATLA:</b> Furkan'ı sarsar, ses çıkarır ve tepki balonları açar.</li>
+            <li>😡 <b>KIZARMA:</b> Sen vurdukça Furkan'ın suratı kıpkırmızı olur.</li>
+            <li>🔥 <b>KOMBO MODU:</b> Çok hızlı tokatlarsan ekran çılgınca yanıp söner!</li>
+            <li>🎵 <b>1-30 PANELİ:</b> Alttaki butonlardan özel ses/videoları keşfet.</li>
+        </ul>
+    </div>
+
     <div class="counter-box">TOPLAM TOKAT: <span id="counter">0</span></div>
 
-    <div class="stage-container">
+    <div class="stage-container" id="stage">
         <div class="side-text">DAYAK ARSIZI</div>
-        
-        <div class="main-display" id="video-area">
+        <div class="main-display">
             <img src="FURKAN.jpeg" id="furkan-img">
             <video id="main-video" playsinline></video>
         </div>
-
         <div class="side-text">FURKAN</div>
     </div>
 
@@ -157,8 +188,10 @@
         const gAudio = document.getElementById('general-audio');
         const counterText = document.getElementById('counter');
         const body = document.getElementById('body-main');
+        const stage = document.getElementById('stage');
 
         let count = parseInt(localStorage.getItem('tokatSayisi')) || 0;
+        let lastClips = [];
         counterText.innerText = count;
 
         function tokatla() {
@@ -166,19 +199,38 @@
             counterText.innerText = count;
             localStorage.setItem('tokatSayisi', count);
 
-            // SARSINTI VE EFEKTİ BAŞLAT
-            body.classList.add('shake-active', 'hit-bg');
-            
-            // 0.5 saniye sonra sarsıntıyı durdur
-            setTimeout(() => {
-                body.classList.remove('shake-active', 'hit-bg');
-            }, 500);
+            // 1. KIZARMA EFEKTİ
+            let redness = Math.min(count * 2, 100);
+            img.style.filter = `sepia(0.5) saturate(2) hue-rotate(-50deg) brightness(${1.2 - (redness/200)})`;
 
-            // Tokat Videosunu Oynat
+            // 2. KONUŞMA BALONU
+            const msj = ["AH!", "YAVAŞ!", "ACIMADI!", "Bİ DAHA!", "YETER!", "OOF!", "ELİNE SAĞLIK!", "DAYAK ARSIZIYIM!", "VUR VUR!"];
+            const b = document.createElement('div');
+            b.className = 'balon';
+            b.innerText = msj[Math.floor(Math.random() * msj.length)];
+            b.style.top = Math.random() * 60 + "%";
+            b.style.left = Math.random() * 70 + "%";
+            stage.appendChild(b);
+            setTimeout(() => b.remove(), 700);
+
+            // 3. SARSINTI VE RENK EFEKTİ
+            body.classList.add('shake-active', 'hit-bg');
+            setTimeout(() => body.classList.remove('shake-active', 'hit-bg'), 400);
+
+            // 4. KOMBO SİSTEMİ
+            const now = Date.now();
+            lastClips.push(now);
+            lastClips = lastClips.filter(t => now - t < 2000);
+            if(lastClips.length > 8) {
+                body.classList.add('combo-active');
+                setTimeout(() => body.classList.remove('combo-active'), 1000);
+            }
+
+            // 5. TOKAT VİDEOSU VE SESİ
             vdo.src = "TOKAT.mp4";
             vdo.style.display = 'block';
             vdo.currentTime = 0;
-            vdo.play();
+            vdo.play().catch(() => {});
             
             tSes.currentTime = 0;
             tSes.play().catch(() => {});
@@ -186,22 +238,24 @@
             vdo.onended = () => { vdo.style.display = 'none'; };
         }
 
-        // Butonlar 1-30
+        // 30 ADET ÖZEL BUTON
         const grid = document.getElementById('grid');
         for (let i = 1; i <= 30; i++) {
-            const b = document.createElement('button');
-            b.className = 'num-btn';
-            b.innerText = i;
-            b.style.backgroundColor = `hsl(${i * 40}, 70%, 50%)`;
-            b.onclick = () => {
+            const btn = document.createElement('button');
+            btn.className = 'num-btn';
+            btn.innerText = i;
+            btn.style.backgroundColor = `hsl(${i * 137}, 60%, 45%)`;
+            btn.onclick = () => {
+                // Önce mp3 dene
                 gAudio.src = i + ".mp3";
                 gAudio.play().catch(() => {
+                    // mp3 yoksa videoyu (.mp4) dene
                     vdo.src = i + ".mp4";
                     vdo.style.display = 'block';
-                    vdo.play();
+                    vdo.play().catch(() => console.log(i + " dosyası bulunamadı."));
                 });
             };
-            grid.appendChild(b);
+            grid.appendChild(btn);
         }
     </script>
 </body>
