@@ -3,42 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Furkan Tokatla v3</title>
+    <title>Dayak Arsızı Furkan</title>
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #0f0f0f;
+            font-family: 'Arial Black', sans-serif;
+            background-color: #0a0a0a;
             color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
             margin: 0;
+            overflow-x: hidden;
         }
 
-        /* Sayaç */
         .counter-box {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #00ffcc;
-            background: #1a1a1a;
-            padding: 10px 40px;
-            border-radius: 50px;
+            font-size: 3rem;
+            color: #ffcc00;
             margin-bottom: 20px;
-            border: 2px solid #00ffcc;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.7);
         }
 
-        /* Ana Görsel Alanı */
+        /* Ana Alan: Yazı - Video - Yazı */
+        .stage-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .side-text {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #ff4757;
+            writing-mode: vertical-rl; /* Yazıyı dikey yapar */
+            text-transform: uppercase;
+            text-shadow: 4px 4px 0px #fff, 8px 8px 0px #000;
+            line-height: 1;
+        }
+
         .main-display {
             position: relative;
-            width: 350px;
-            height: 350px;
-            margin-bottom: 30px;
+            width: 400px;
+            height: 400px;
             background: #000;
             border-radius: 20px;
             overflow: hidden;
-            border: 4px solid #ff4757;
+            border: 8px solid #ff4757;
+            box-shadow: 0 0 50px rgba(255, 71, 87, 0.5);
         }
 
         #furkan-img, #main-video {
@@ -46,69 +59,77 @@
             height: 100%;
             object-fit: cover;
             position: absolute;
-            top: 0;
-            left: 0;
         }
 
         #main-video { display: none; z-index: 2; }
-        #furkan-img { z-index: 1; }
 
         .tokat-btn {
-            padding: 15px 50px;
-            font-size: 1.8rem;
-            background: linear-gradient(45deg, #ff4757, #ff6b81);
+            padding: 20px 60px;
+            font-size: 2.5rem;
+            background: #ff4757;
             color: white;
-            border: none;
-            border-radius: 50px;
+            border: 4px solid white;
+            border-radius: 100px;
             cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4);
+            font-weight: 900;
+            box-shadow: 0 10px 0px #b33939;
             margin-bottom: 40px;
-            transition: 0.2s;
+            transition: 0.1s;
         }
 
-        .tokat-btn:hover { transform: scale(1.05); }
-        .tokat-btn:active { transform: scale(0.95); }
+        .tokat-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 5px 0px #b33939;
+        }
 
-        /* Buton Paneli (Altta) */
+        /* 30 Buton */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            grid-template-columns: repeat(10, 1fr);
             gap: 10px;
-            width: 100%;
-            max-width: 800px;
-            background: #1a1a1a;
+            max-width: 900px;
             padding: 20px;
+            background: #1a1a1a;
             border-radius: 20px;
         }
 
         .num-btn {
-            aspect-ratio: 1/1;
+            width: 60px;
+            height: 60px;
             border: none;
             border-radius: 10px;
             color: white;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        .num-btn:hover { transform: scale(1.1); filter: brightness(1.2); }
+        /* Mobil uyum */
+        @media (max-width: 800px) {
+            .side-text { font-size: 2rem; }
+            .main-display { width: 250px; height: 250px; }
+            .grid-container { grid-template-columns: repeat(5, 1fr); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="counter-box">TOKAT: <span id="counter">0</span></div>
+    <div class="counter-box">TOPLAM TOKAT: <span id="counter">0</span></div>
 
-    <div class="main-display">
-        <img src="FURKAN.jpeg" id="furkan-img">
-        <video id="main-video" playsinline></video>
+    <div class="stage-container">
+        <div class="side-text">DAYAK ARSIZI</div>
+        
+        <div class="main-display">
+            <img src="FURKAN.jpeg" id="furkan-img">
+            <video id="main-video" playsinline></video>
+        </div>
+
+        <div class="side-text">FURKAN</div>
     </div>
 
     <button class="tokat-btn" onclick="tokatla()">✋ TOKATLA ✋</button>
 
-    <div class="grid-container" id="grid">
-        </div>
+    <div class="grid-container" id="grid"></div>
 
     <audio id="tokat-ses" src="TOKAT_SESI.mp3"></audio>
     <audio id="general-audio"></audio>
@@ -123,57 +144,39 @@
         let count = parseInt(localStorage.getItem('tokatSayisi')) || 0;
         counterText.innerText = count;
 
-        // TOKATLA FONKSİYONU
         function tokatla() {
             count++;
             counterText.innerText = count;
             localStorage.setItem('tokatSayisi', count);
 
-            playMedia("TOKAT", "mp4");
+            // Tokat Efekti
+            vdo.src = "TOKAT.mp4";
+            vdo.style.display = 'block';
+            vdo.currentTime = 0;
+            vdo.play();
+            
             tSes.currentTime = 0;
-            tSes.play().catch(() => console.log("Tokat sesi bulunamadı."));
+            tSes.play().catch(() => {});
+
+            vdo.onended = () => { vdo.style.display = 'none'; };
         }
 
-        // GENEL MEDYA OYNATMA (Video veya Ses)
-        function playMedia(fileName, type) {
-            // Her şeyi durdur
-            vdo.pause();
-            gAudio.pause();
-            vdo.style.display = 'none';
-
-            if (type === "mp4") {
-                vdo.src = fileName + ".mp4";
-                vdo.style.display = 'block';
-                vdo.currentTime = 0;
-                vdo.play().catch(() => {
-                    // Eğer mp4 başarısız olursa mp3 dene (Tokat hariç butonlar için)
-                    if(fileName !== "TOKAT") playMedia(fileName, "mp3");
-                });
-            } else {
-                gAudio.src = fileName + ".mp3";
-                gAudio.currentTime = 0;
-                gAudio.play().catch(() => console.log(fileName + ".mp3 bulunamadı."));
-            }
-
-            // Video bittiğinde resmi geri getir
-            vdo.onended = () => {
-                vdo.style.display = 'none';
-            };
-        }
-
-        // 30 BUTON OLUŞTURMA
+        // Butonlar 1-30
         const grid = document.getElementById('grid');
         for (let i = 1; i <= 30; i++) {
             const b = document.createElement('button');
             b.className = 'num-btn';
             b.innerText = i;
-            b.style.backgroundColor = `hsl(${i * 60}, 60%, 45%)`;
-            
+            b.style.backgroundColor = `hsl(${i * 40}, 70%, 50%)`;
             b.onclick = () => {
-                // Her buton önce video (.mp4) dener, yoksa ses (.mp3) çalar
-                playMedia(i, "mp4");
+                gAudio.src = i + ".mp3";
+                gAudio.play().catch(() => {
+                    // mp3 yoksa videoyu dene
+                    vdo.src = i + ".mp4";
+                    vdo.style.display = 'block';
+                    vdo.play();
+                });
             };
-            
             grid.appendChild(b);
         }
     </script>
